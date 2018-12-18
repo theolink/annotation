@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/annotation
+    username: root
+    password: 123456
+server:
+  servlet:
+    context-path: /annotation
+  port: 9090
