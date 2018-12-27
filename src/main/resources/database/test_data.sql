@@ -8,8 +8,8 @@ INSERT into trial (name, video_num, uploader) VALUES
 DELETE FROM video;
 
 INSERT into video (trial_id, address, length, tagged, tagger) VALUES
-(1,'http://baidu.com',10000,0,1),
-(1,'http://baidu.com',10000,0,1),
-(1,'http://baidu.com',10000,1,1),
-(2,'http://baidu.com',10000,2,1),
-(2,'http://baidu.com',10000,1,1);
+(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,0,1),
+(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,0,1),
+(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,1,1),
+(2,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,2,1),
+(2,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,1,1);

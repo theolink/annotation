@@ -6,9 +6,10 @@ import lombok.Data;
 public class Clips {
 	private int id;
 	private int videoId;
-	private int frameNum;
+	private Long frameNum;
 	private String address;
 	private String xmlAddress;
+	private String tag;
 	private int tagged;
 	private int tagger;
 }

@@ -8,3 +8,6 @@ server:
   servlet:
     context-path: /annotation
   port: 9090
+props:
+  videoOutputDir: F:\\data\\imgTest
+  stepSize: 1

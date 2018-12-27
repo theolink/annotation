@@ -11,4 +11,5 @@ public interface ClipsInfoService extends IService<ClipsInfo> {
 	List<ClipsInfo> getListByVideoId(int videoId);
 	Map<Integer,Integer> toMap(List<ClipsInfo> clipsInfos);
 	boolean save(int videoId,Map clipsInfos);
+	boolean update(int videoId,Map clipsInfos);
 }

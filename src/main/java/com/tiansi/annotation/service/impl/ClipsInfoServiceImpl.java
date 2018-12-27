@@ -44,4 +44,11 @@ public class ClipsInfoServiceImpl extends ServiceImpl<ClipsInfoMapper, ClipsInfo
 		});
 		return this.saveBatch(clipsInfoList);
 	}
+
+	@Override
+	public boolean update(int videoId, Map clipsInfos) {
+		this.remove(new QueryWrapper<ClipsInfo>().eq("video_id",videoId));
+		return this.save(videoId,clipsInfos);
+	}
+
 }
