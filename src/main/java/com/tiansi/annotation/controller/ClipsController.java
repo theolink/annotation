@@ -21,7 +21,7 @@ public class ClipsController {
 
     @RequestMapping(value = "/findById", method = RequestMethod.GET)
     @ApiOperation(value = "根据区间Id获取区间")
-    @ApiImplicitParam(name = "id", value = "区间id", required = true, dataType = "Integer")
+    @ApiImplicitParam(name = "id", value = "区间id", paramType = "query", required = true, dataType = "Integer")
     public Result getById(@RequestParam() int id) {
         return new Result("clips", clipsService.getById(id));
     }
@@ -41,14 +41,14 @@ public class ClipsController {
 
     @RequestMapping(value = "/findByVideoId", method = RequestMethod.GET)
     @ApiOperation(value = "根据videoId获取区间")
-    @ApiImplicitParam(name = "videoId", value = "视频id", required = true, dataType = "Integer")
+    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Integer")
     public Result getByVideoId(@RequestParam() int videoId) {
         return new Result("clips", clipsService.findByVideoId(videoId));
     }
 
     @RequestMapping(value = "/findByVideoIdUntagged", method = RequestMethod.GET)
     @ApiOperation(value = "根据videoId获得未标记区间")
-    @ApiImplicitParam(name = "videoId", value = "视频id", required = true, dataType = "Integer")
+    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Integer")
     public Result getByVideoIdUntagged(@RequestParam() int videoId) {
         return new Result("clips", clipsService.findByVideoIdUntagged(videoId));
     }
@@ -66,7 +66,7 @@ public class ClipsController {
 
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
     @ApiOperation(value = "清除标签及框信息")
-    @ApiImplicitParam(name = "id", value = "区间id", required = true, dataType = "Integer")
+    @ApiImplicitParam(name = "id", value = "区间id", required = true, paramType = "query", dataType = "Integer")
     public Result clear(@RequestParam() int id) {
         return new Result("clips", clipsService.clear(id));
     }

@@ -4,4 +4,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tiansi.annotation.domain.Trial;
 
 public interface TrialService extends IService<Trial> {
+    int insert(Trial trial);
 }

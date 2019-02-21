@@ -33,21 +33,21 @@ public class VideoController {
 
     @RequestMapping(value = "/getSomeones", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记过AB区间及标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", dataType = "Integer")
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
     public Result getSomeones(@RequestParam() int id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeones(id)));
     }
 
     @RequestMapping(value = "/getSomeonesTagged", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记过AB区间的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", dataType = "Integer")
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
     public Result getSomeonesTagged(@RequestParam() int id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeonesTagged(id)));
     }
 
     @RequestMapping(value = "/getSomeonesTagging", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", dataType = "Integer")
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
     public Result getSomeonesTagging(@RequestParam() int id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeonesTagging(id)));
     }
@@ -62,15 +62,23 @@ public class VideoController {
     @RequestMapping(value = "/segment", method = RequestMethod.POST)
     @ApiOperation(value = "分割区间，保存视频的AB区间信息")
     public Result segment(@RequestBody @ApiParam(value = "视频对象，其中id、tagger、clipsInfo字段为必须，clipsInfo格式:[[A,B],[A,B]..]")
-                               VideoClips videoClips) {
-        if(videoClips==null||videoClips.getId()<=0){
-            return new Result("SaveSuccessful", false).add("msg","非法参数");
+                                  VideoClips videoClips) {
+        if (videoClips == null || videoClips.getId() <= 0) {
+            return new Result("SaveSuccessful", false).add("msg", "非法参数");
         }
-        if(videoClips.getTagger()<=0){
-            return new Result("SaveSuccessful", false).add("msg","非法tagger");
+        if (videoClips.getTagger() <= 0) {
+            return new Result("SaveSuccessful", false).add("msg", "非法tagger");
         }
         boolean result = videoService.segment(videoClips.toVideo());
         return new Result("SaveSuccessful", result);
+    }
+
+    @RequestMapping(value = "/scan", method = RequestMethod.GET)
+    @ApiOperation(value = "扫描视频")
+    @ApiImplicitParam(name = "path", value = "扫描路径",paramType = "query", dataType = "String")
+    public Result scan(@RequestParam() String path) {
+        System.out.println(path);
+        return new Result("videoNum", videoService.addVideos());
     }
 
 }
