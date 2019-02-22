@@ -1,13 +1,16 @@
+#数据源配置
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.99.100:3306/annotation?characterEncoding=utf-8
     username: root
     password: 123456
+#服务器配置
 server:
   servlet:
     context-path: /annotation
   port: 9090
+#运行参数
 props:
   clipHome: F:\\data\\annotation\\clips
   originVideoHome: F:\\data\\annotation\\video\\origin
@@ -16,6 +19,7 @@ props:
   stepSize: 1
   serverAddress: 192.168.1.120:8080\annotation
   videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
+#视频分割参数
   videoRanges1:
     - {x1: 0,x2: 0.5,y1: 0,y2: 0.5}
     - {x1: 0.5,x2: 1,y1: 0,y2: 0.5}
