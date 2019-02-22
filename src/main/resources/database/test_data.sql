@@ -7,9 +7,17 @@ INSERT into trial (name, video_num, uploader) VALUES
 
 DELETE FROM video;
 
-INSERT into video (trial_id, address, length, tagged, tagger) VALUES
-(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,0,1),
-(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,0,1),
-(1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,1,1),
-(2,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,2,1),
-(2,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',10000,1,1);
+INSERT into video (trial_id,name,origin_video_id, address, length) VALUES
+(1,'不知道是什么',1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',8),
+(1,'不知道是啥',1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',8);
+
+DELETE FROM clips;
+
+INSERT into clips (video_id,name,frame_num, address) VALUES
+(1,'clip-1.29-2.05',11,'192.168.1.120:8080/annotation/clips/video-1/clip-1.29-2.05.zip'),
+(1,'clip-2.9-3.72',12,'192.168.1.120:8080/annotation/clips/video-1/clip-2.9-3.72.zip');
+
+DELETE FROM users;
+
+INSERT into users (username, password,role) VALUES
+('super','123456','ADMIN')
