@@ -7,18 +7,18 @@ import java.util.Date;
 
 @Data
 public class OriginVideo {
-    private int id;
-    private int trialId;
+    private Long id;
+    private Long trialId;
     private String name;
     private String address;
 
-    private int uploader;
+    private Long uploader;
     private Date uploadDate;
     //视频预处理状态,0：未处理，1：处理中，2：已处理
-    private int preDeal;
-    private int preDealer;
+    private Integer preDeal;
+    private Long preDealer;
     private Date preDealDate;
 
     @TableLogic
-    private int isDeleted;
+    private Integer isDeleted;
 }

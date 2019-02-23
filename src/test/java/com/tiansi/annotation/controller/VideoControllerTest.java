@@ -59,8 +59,8 @@ public class VideoControllerTest {
 	@Test
 	public void segmentTest() throws Exception{
 		VideoClips videoClips =new VideoClips();
-		videoClips.setId(1);
-		videoClips.setTagger(2);
+		videoClips.setId(1L);
+		videoClips.setTagger(2L);
 
 		List<NumPair> numPairs=new ArrayList<>();
 		numPairs.add(new NumPair(1L,9L));

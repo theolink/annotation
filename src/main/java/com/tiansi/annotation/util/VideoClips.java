@@ -14,18 +14,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VideoClips {
-    private int id;
-    private int trialId;
+    private Long id;
+    private Long trialId;
+    private String name;
+    private Long originVideoId;
     private String address;
-    private int length;
-    private int tagged;
-    private int tagger;
+    private Integer length;
+    private Integer tagged;
+    private Long tagger;
     private List<NumPair> clipsInfo;
 
     public Video toVideo() {
         Video video = new Video();
         video.setId(this.getId());
         video.setTrialId(this.getTrialId());
+        video.setName(this.getName());
+        video.setOriginVideoId(this.getOriginVideoId());
         video.setAddress(this.getAddress());
         video.setLength(this.getLength());
         video.setTagged(this.getTagged());
@@ -50,6 +54,8 @@ public class VideoClips {
         if (video != null) {
             this.setId(video.getId());
             this.setTrialId(video.getTrialId());
+            this.setName(video.getName());
+            this.setOriginVideoId(video.getOriginVideoId());
             this.setAddress(video.getAddress());
             this.setLength(video.getLength());
             this.setTagged(video.getTagged());

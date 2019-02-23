@@ -13,12 +13,12 @@ import java.util.List;
 public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements ClipsService {
 
     @Override
-    public List<Clips> findByVideoId(int videoId) {
+    public List<Clips> findByVideoId(Long videoId) {
         return list(new QueryWrapper<Clips>().eq("video_id", videoId));
     }
 
     @Override
-    public List<Clips> findByVideoIdUntagged(int videoId) {
+    public List<Clips> findByVideoIdUntagged(Long videoId) {
         return list(new QueryWrapper<Clips>().eq("video_id", videoId).eq("tagged", 0));
     }
 
@@ -33,7 +33,7 @@ public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements
     }
 
     @Override
-    public boolean deleteByVideoId(int videoId) {
+    public boolean deleteByVideoId(Long videoId) {
         return remove(new QueryWrapper<Clips>().eq("video_id", videoId));
     }
 
@@ -53,16 +53,16 @@ public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements
     }
 
     @Override
-    public boolean clear(int id) {
+    public boolean clear(Long id) {
         Clips clips = getById(id);
         clips.setTag("");
         return updateById(clips);
     }
 
     @Override
-    public int clearBatch(List<Integer> ids) {
+    public int clearBatch(List<Long> ids) {
         int flag = 0;
-        for (int id : ids) {
+        for (Long id : ids) {
             if (clear(id)) {
                 flag++;
             }

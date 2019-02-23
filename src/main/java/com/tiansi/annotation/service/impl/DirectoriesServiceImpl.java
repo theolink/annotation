@@ -33,7 +33,7 @@ public class DirectoriesServiceImpl extends ServiceImpl<DirectoriesMapper, Direc
         }
         File[] totalDirectories = originHome.listFiles();
         ArrayList<String> totalDirectoriesNames = new ArrayList<>();
-        if (totalDirectories == null) {
+        if (totalDirectories == null || totalDirectories.length == 0) {
             return totalDirectoriesNames;
         }
         for (File directory : totalDirectories) {

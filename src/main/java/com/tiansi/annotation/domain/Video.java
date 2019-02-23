@@ -11,17 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Video {
-    private int id;
-    private int trialId;
+    private Long id;
+    private Long trialId;
     private String name;
+    private Long originVideoId;
     private String address;
-    private int length;
-    private int tagged;
-    private int tagger;
+    private Integer length;
+    private Integer tagged;
+    private Long tagger;
     private String clipsInfo;
 
     @TableLogic
-    private int isDeleted;
+    private Integer isDeleted;
 
     public VideoClips toVideoClips() {
         return new VideoClips(this);

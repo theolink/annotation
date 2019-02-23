@@ -15,8 +15,8 @@ data annotation backend program
 
 #### 使用说明
 
-1. xxxx
-2. xxxx
+1. 安装opencv
+2. 项目启动参数:-ea -Djava.library.path="D:\program\opencv\build\java\x64;D:\program\opencv\build\x64\vc15\bin"
 3. xxxx
 
 #### 参与贡献

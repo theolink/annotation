@@ -33,22 +33,22 @@ public class VideoController {
 
     @RequestMapping(value = "/getSomeones", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记过AB区间及标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
-    public Result getSomeones(@RequestParam() int id) {
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Long")
+    public Result getSomeones(@RequestParam() Long id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeones(id)));
     }
 
     @RequestMapping(value = "/getSomeonesTagged", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记过AB区间的视频")
-    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
-    public Result getSomeonesTagged(@RequestParam() int id) {
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Long")
+    public Result getSomeonesTagged(@RequestParam() Long id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeonesTagged(id)));
     }
 
     @RequestMapping(value = "/getSomeonesTagging", method = RequestMethod.GET)
     @ApiOperation(value = "获取指定用户标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Integer")
-    public Result getSomeonesTagging(@RequestParam() int id) {
+    @ApiImplicitParam(name = "id", value = "用户id",paramType = "query", dataType = "Long")
+    public Result getSomeonesTagging(@RequestParam() Long id) {
         return new Result("videos", VideoClips.fromVideos(videoService.findSomeonesTagging(id)));
     }
 
@@ -73,12 +73,6 @@ public class VideoController {
         return new Result("SaveSuccessful", result);
     }
 
-    @RequestMapping(value = "/scan", method = RequestMethod.GET)
-    @ApiOperation(value = "扫描视频")
-    @ApiImplicitParam(name = "path", value = "扫描路径",paramType = "query", dataType = "String")
-    public Result scan(@RequestParam() String path) {
-        System.out.println(path);
-        return new Result("videoNum", videoService.addVideos());
-    }
+
 
 }

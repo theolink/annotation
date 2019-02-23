@@ -6,7 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 
 public interface TrialMapper extends BaseMapper<Trial> {
-    @Options(useGeneratedKeys = true, keyColumn = "id")
+
     @Insert("Insert into trial(name,video_num,upload_date,uploader) values(#{name},#{videoNum},#{uploadDate},#{uploader})")
-    int insert(Trial trial);
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
+    void save(Trial trial);
 }

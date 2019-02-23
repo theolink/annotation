@@ -15,6 +15,6 @@ public class ClipsServiceTest {
 
     @Test
     public void deleteByVideoIdTest() {
-        Assert.assertEquals(true, clipsService.deleteByVideoId(1));
+        Assert.assertEquals(true, clipsService.deleteByVideoId(1L));
     }
 }

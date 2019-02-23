@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Directories {
-    private int id;
+    private Long id;
     private String name;
 
     @TableLogic
-    private int isDeleted;
+    private Integer isDeleted;
 
     public Directories(String name) {
         this.name = name;

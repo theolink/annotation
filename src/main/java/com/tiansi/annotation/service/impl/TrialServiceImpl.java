@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TrialServiceImpl extends ServiceImpl<TrialMapper, Trial> implements TrialService {
     @Override
-    public int insert(Trial trial) {
-        return baseMapper.insert(trial);
+    public Long insert(Trial trial) {
+        baseMapper.save(trial);
+        return trial.getId();
     }
 }

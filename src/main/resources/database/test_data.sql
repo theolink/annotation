@@ -8,8 +8,9 @@ INSERT into trial (name, video_num, uploader) VALUES
 DELETE FROM video;
 
 INSERT into video (trial_id,name,origin_video_id, address, length) VALUES
-(1,'不知道是什么',1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',8),
-(1,'不知道是啥',1,'http://theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',8);
+(1,'不知道是什么',1,'theo.oss-cn-shanghai.aliyuncs.com/projectlow/c4ac3ccdcd71a1959402c960ee86eae8.mp4',8),
+(1,'不知道是啥',1,'192.168.1.120:8080/annotation/video/processed/2019-02-21/15507430238950.5105701451339169.mp4',8);
+# (1,'不知道是何',1,'http://192.168.1.120:8080/annotation/video/processed/2019-02-22/155083730102880403.mp4',8);
 
 DELETE FROM clips;
 

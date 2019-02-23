@@ -41,15 +41,15 @@ public class ClipsController {
 
     @RequestMapping(value = "/findByVideoId", method = RequestMethod.GET)
     @ApiOperation(value = "根据videoId获取区间")
-    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Integer")
-    public Result getByVideoId(@RequestParam() int videoId) {
+    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Long")
+    public Result getByVideoId(@RequestParam() Long videoId) {
         return new Result("clips", clipsService.findByVideoId(videoId));
     }
 
     @RequestMapping(value = "/findByVideoIdUntagged", method = RequestMethod.GET)
     @ApiOperation(value = "根据videoId获得未标记区间")
-    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Integer")
-    public Result getByVideoIdUntagged(@RequestParam() int videoId) {
+    @ApiImplicitParam(name = "videoId", value = "视频id", paramType = "query", required = true, dataType = "Long")
+    public Result getByVideoIdUntagged(@RequestParam() Long videoId) {
         return new Result("clips", clipsService.findByVideoIdUntagged(videoId));
     }
 
@@ -66,15 +66,15 @@ public class ClipsController {
 
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
     @ApiOperation(value = "清除标签及框信息")
-    @ApiImplicitParam(name = "id", value = "区间id", required = true, paramType = "query", dataType = "Integer")
-    public Result clear(@RequestParam() int id) {
+    @ApiImplicitParam(name = "id", value = "区间id", required = true, paramType = "query", dataType = "Long")
+    public Result clear(@RequestParam() Long id) {
         return new Result("clips", clipsService.clear(id));
     }
 
     @RequestMapping(value = "/clearBatch", method = RequestMethod.GET)
     @ApiOperation(value = "批量清除标签及框信息")
-    @ApiImplicitParam(name = "ids", value = "区间id列表", required = true, dataType = "Integer")
-    public Result clearBatch(@RequestBody @ApiParam(value = "id列表") List<Integer> ids) {
+    @ApiImplicitParam(name = "ids", value = "区间id列表", required = true, dataType = "Long")
+    public Result clearBatch(@RequestBody @ApiParam(value = "id列表") List<Long> ids) {
         return new Result("clips", clipsService.clearBatch(ids));
     }
 }

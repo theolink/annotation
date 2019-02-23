@@ -5,16 +5,16 @@ import lombok.Data;
 
 @Data
 public class Clips {
-	private int id;
+	private Long id;
 	private String name;
-	private int videoId;
-	private Long frameNum;
+	private Long videoId;
+	private Integer frameNum;
 	private String address;
 	private String xmlAddress;
 	private String tag;
-	private int tagged;
-	private int tagger;
+	private Integer tagged;
+	private Long tagger;
 
 	@TableLogic
-	private int isDeleted;
+	private Integer isDeleted;
 }

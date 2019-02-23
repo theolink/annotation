@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "props")
 public class Props {
+    private String basePath;
     private String clipHome;
     private String originVideoHome;
     private String videoHome;
