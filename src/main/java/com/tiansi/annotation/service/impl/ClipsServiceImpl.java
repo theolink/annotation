@@ -7,6 +7,7 @@ import com.tiansi.annotation.mapper.ClipsMapper;
 import com.tiansi.annotation.service.ClipsService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -49,6 +50,7 @@ public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements
         originClips.setTag(clips.getTag());
         originClips.setTagger(clips.getTagger());
         originClips.setTagged(1);
+        originClips.setTagDate(new Date());
         return save(originClips);
     }
 

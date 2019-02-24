@@ -1,7 +1,7 @@
 package com.tiansi.annotation.service;
 
 import com.tiansi.annotation.exception.TiansiException;
-import com.tiansi.annotation.util.Props;
+import com.tiansi.annotation.model.Props;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

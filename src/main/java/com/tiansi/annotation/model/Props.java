@@ -1,5 +1,6 @@
-package com.tiansi.annotation.util;
+package com.tiansi.annotation.model;
 
+import com.tiansi.annotation.model.VideoRange;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

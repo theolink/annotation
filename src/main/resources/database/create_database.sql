@@ -19,6 +19,7 @@ CREATE TABLE video
   length   INT(10) COMMENT '视频时长（秒）',
   tagged   INT(1) DEFAULT 0 COMMENT '是否已标注,0未标注，1标注中，2已标注',
   tagger   INT(20) COMMENT '标注者ID',
+  tag_date datetime  COMMENT 'AB区间信息标记时间',
   clips_info VARCHAR(20000) COMMENT '区间信息',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );
@@ -35,6 +36,7 @@ CREATE TABLE clips
   tag         VARCHAR(20000) COMMENT '标签JSON',
   tagged      INT(1) DEFAULT 0 COMMENT '是否已标注,0未标注，1标注中，2已标注',
   tagger      INT(20) COMMENT '标注者ID',
+  tag_date datetime  COMMENT '标签标注时间',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );
 
@@ -66,6 +68,6 @@ CREATE TABLE origin_video
   upload_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间',
   pre_deal INT(1) DEFAULT 0 COMMENT '视频预处理状态,0：未处理，1：处理中，2：已处理',
   pre_dealer BIGINT(20) COMMENT '预处理执行者ID',
-  pre_deal_date datetime  COMMENT '预处理执行时间时间',
+  pre_deal_date datetime  COMMENT '预处理执行时间',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );

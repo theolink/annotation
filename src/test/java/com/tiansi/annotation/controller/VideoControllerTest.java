@@ -1,9 +1,8 @@
 package com.tiansi.annotation.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.tiansi.annotation.domain.Video;
-import com.tiansi.annotation.util.NumPair;
-import com.tiansi.annotation.util.VideoClips;
+import com.tiansi.annotation.model.NumPair;
+import com.tiansi.annotation.domain.body.VideoRequestBody;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +56,9 @@ public class VideoControllerTest {
 
 	@Test
 	public void segmentTest() throws Exception{
-		VideoClips videoClips =new VideoClips();
-		videoClips.setId(1L);
-		videoClips.setTagger(2L);
+		VideoRequestBody videoRequestBody =new VideoRequestBody();
+		videoRequestBody.setId(1L);
+		videoRequestBody.setTagger(2L);
 
 		List<NumPair> numPairs=new ArrayList<>();
 		numPairs.add(new NumPair(1L,9L));
@@ -69,9 +67,9 @@ public class VideoControllerTest {
 		numPairs.add(new NumPair(111L,222L));
 		numPairs.add(new NumPair(333L,444L));
 
-		videoClips.setClipsInfo(numPairs);
+		videoRequestBody.setClipsInfo(numPairs);
 
-		String requestContent = JSON.toJSONString(videoClips);
+		String requestContent = JSON.toJSONString(videoRequestBody);
 		mockMvc.perform(post("/video/segment")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestContent)

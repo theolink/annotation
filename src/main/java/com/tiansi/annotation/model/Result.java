@@ -1,4 +1,4 @@
-package com.tiansi.annotation.util;
+package com.tiansi.annotation.model;
 
 import lombok.NoArgsConstructor;
 

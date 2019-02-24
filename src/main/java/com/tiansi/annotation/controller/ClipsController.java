@@ -2,7 +2,7 @@ package com.tiansi.annotation.controller;
 
 import com.tiansi.annotation.domain.Clips;
 import com.tiansi.annotation.service.ClipsService;
-import com.tiansi.annotation.util.Result;
+import com.tiansi.annotation.model.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

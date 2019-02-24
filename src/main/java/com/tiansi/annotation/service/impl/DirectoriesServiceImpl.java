@@ -6,7 +6,7 @@ import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.mapper.DirectoriesMapper;
 import com.tiansi.annotation.service.DirectoriesService;
-import com.tiansi.annotation.util.Props;
+import com.tiansi.annotation.model.Props;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,15 +1,10 @@
 package com.tiansi.annotation.service;
 
-import com.tiansi.annotation.util.DateUtil;
-import com.tiansi.annotation.util.Props;
-import org.junit.Test;
+import com.tiansi.annotation.model.Props;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.File;
-import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,24 +14,24 @@ public class VideoServiceTest {
     @Autowired
     private Props props;
 
-    @Test
-    public void interceptFrameTest() {
-        String videoPath = "F:\\data\\imgTest\\1.mp4";
-        String outputPath = props.getClipHome();
-        double start = 2.3;
-        double end = 5.6;
-        int step = 1;
-        videoService.interceptFrame(videoPath, outputPath, start, end, step);
-    }
-
-    @Test
-    public void cutVideoTest() {
-        try {
-            videoService.cutVideo(1L);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    public void interceptFrameTest() {
+//        String videoPath = "F:\\data\\imgTest\\1.mp4";
+//        String outputPath = props.getClipHome();
+//        double start = 2.3;
+//        double end = 5.6;
+//        int step = 1;
+//        videoService.interceptFrame(videoPath, outputPath, start, end, step);
+//    }
+//
+//    @Test
+//    public void cutVideoTest() {
+//        try {
+//            videoService.cutVideo(1);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    @Test
 //    public void divideTest() {

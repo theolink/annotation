@@ -1,5 +1,6 @@
 package com.tiansi.annotation.util;
 
+import com.tiansi.annotation.model.Props;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

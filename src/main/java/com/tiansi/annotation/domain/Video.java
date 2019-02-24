@@ -1,10 +1,12 @@
 package com.tiansi.annotation.domain;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.tiansi.annotation.util.VideoClips;
+import com.tiansi.annotation.domain.body.VideoRequestBody;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 
 @Data
@@ -19,12 +21,13 @@ public class Video {
     private Integer length;
     private Integer tagged;
     private Long tagger;
+    private Date tagDate;
     private String clipsInfo;
 
     @TableLogic
     private Integer isDeleted;
 
-    public VideoClips toVideoClips() {
-        return new VideoClips(this);
+    public VideoRequestBody requestBody() {
+        return new VideoRequestBody(this);
     }
 }

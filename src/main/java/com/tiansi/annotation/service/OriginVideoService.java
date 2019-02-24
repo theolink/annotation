@@ -54,18 +54,8 @@ public interface OriginVideoService extends IService<OriginVideo> {
      * 切割原始视频
      *
      * @param processor 执行者
-     * @return 切割完成的视频路径
      */
-    int divide(Users processor);
-
-    /**
-     * 切割原始视频
-     *
-     * @param originVideos 原始视频
-     * @param processor      执行者
-     * @return 切割完成的视频路径
-     */
-    int divide(List<OriginVideo> originVideos, Users processor);
+    void divide(Users processor);
 
     /**
      * 开始分割:将原始视频分割状态标记为分割中

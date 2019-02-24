@@ -7,46 +7,38 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Trial;
 import com.tiansi.annotation.domain.Users;
-import com.tiansi.annotation.domain.Video;
+import com.tiansi.annotation.domain.body.OriginVideoUtil;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.mapper.OriginVideoMapper;
+import com.tiansi.annotation.model.Props;
 import com.tiansi.annotation.service.DirectoriesService;
 import com.tiansi.annotation.service.OriginVideoService;
 import com.tiansi.annotation.service.TrialService;
-import com.tiansi.annotation.service.VideoService;
-import com.tiansi.annotation.util.AddressUtil;
-import com.tiansi.annotation.util.DateUtil;
-import com.tiansi.annotation.util.Props;
-import com.tiansi.annotation.util.VideoRange;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.VideoWriter;
-import org.opencv.videoio.Videoio;
+import com.tiansi.annotation.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@EnableAsync
 public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, OriginVideo> implements OriginVideoService {
     @Autowired
     private TrialService trialService;
     @Autowired
     private DirectoriesService directoriesService;
     @Autowired
-    private VideoService videoService;
-    @Autowired
     private Props props;
     @Autowired
     private AddressUtil addressUtil;
+    @Autowired
+    private OriginVideoUtil originVideoUtil;
 
     @Override
     public int scan(Users processor) {
@@ -81,7 +73,7 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
                     totalVideosNum += scan(fileList[i].getAbsolutePath(), processor);
                 } else {
                     String fileName = fileList[i].getName();
-                    if (isVideo(fileName)) {
+                    if (originVideoUtil.isVideo(fileName)) {
                         String absolutePath = fileList[i].getAbsolutePath();
                         System.out.println("absolutePath is :" + absolutePath);
                         String videoPath = addressUtil.toServerAddress(absolutePath);
@@ -119,16 +111,16 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
     public Page find(Long id, Long trialId, String name, Long uploader, Date uploadDateStart, Date uploadDateEnd, Integer preDeal,
                      Long preDealer, Date preDealDateStart, Date preDealDateEnd, Integer currentPage, Integer pageSize) {
         QueryWrapper<OriginVideo> queryWrapper = new QueryWrapper<>();
-        if (id != null && id != 0) {
+        if (id != null) {
             queryWrapper = queryWrapper.eq("id", id);
         }
-        if (trialId != null && trialId != 0) {
+        if (trialId != null ) {
             queryWrapper = queryWrapper.eq("trial_id", trialId);
         }
         if (!StringUtils.isEmpty(name)) {
             queryWrapper = queryWrapper.like("name", name);
         }
-        if (uploader != null && uploader != 0) {
+        if (uploader != null ) {
             queryWrapper = queryWrapper.eq("uploader", uploader);
         }
         if (uploadDateStart != null) {
@@ -140,7 +132,7 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         if (preDeal != null) {
             queryWrapper = queryWrapper.eq("pre_deal", preDeal);
         }
-        if (preDealer != null && preDealer != 0) {
+        if (preDealer != null ) {
             queryWrapper = queryWrapper.eq("pre_dealer", preDealer);
         }
         if (preDealDateStart != null) {
@@ -156,22 +148,11 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
     }
 
     @Override
-    public int divide(Users processor) {
+    public void divide(Users processor) {
         List<OriginVideo> originVideos = getUndivided();
-        return divide(originVideos, processor);
-    }
-
-    @Override
-    public int divide(List<OriginVideo> originVideos, Users processor) {
         startDivide(getIds(originVideos), processor);
-        int dividedNum = 0;
-        for (OriginVideo originVideo : originVideos) {
-            dividedNum += divide(originVideo);
-            endDivide(originVideo.getId());
-        }
-        return dividedNum;
+        originVideoUtil.divide(originVideos);
     }
-
 
     @Override
     public void startDivide(Long originId, Users processor) {
@@ -203,164 +184,6 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         originVideo.setPreDeal(2);
         originVideo.setPreDealDate(new Date());
         update(originVideo, new UpdateWrapper<OriginVideo>().in("id", originIds));
-    }
-
-    /**
-     * 拆分画面拼接的原始视频
-     *
-     * @param originVideo 原始视频
-     * @return 分割成功的视频数
-     */
-    private int divide(OriginVideo originVideo) {
-        List<String> processedPaths = divide(addressUtil.toLocalAddress(originVideo.getAddress()), generateDividedPath());
-        if (processedPaths.size() > 0) {
-            Trial trial = trialService.getById(originVideo.getTrialId());
-            trial.setVideoNum(processedPaths.size());
-            trialService.updateById(trial);
-            processedPaths.forEach(processedPath -> {
-                Video video = new Video();
-                video.setAddress(addressUtil.toServerAddress(processedPath));
-                video.setTrialId(originVideo.getTrialId());
-                video.setOriginVideoId(originVideo.getId());
-                video.setName(addressUtil.getFileName(processedPath));
-                videoService.save(video);
-            });
-            return processedPaths.size();
-        }
-        return 0;
-    }
-
-    /**
-     * 拆分画面拼接的原始视频
-     *
-     * @param originPath 原始视频路径
-     * @param outputPath 输出路径
-     * @return 分割后的视频路径
-     */
-    private ArrayList<String> divide(String originPath, String outputPath) {
-        ArrayList<String> processedPath = new ArrayList<>();
-        try {
-            int dividedMode = getDividedMode(originPath);
-            List<VideoRange> videoRanges;
-            if (dividedMode == 0) {
-                String videoPath = outputPath + "/" + System.currentTimeMillis() + (int) (Math.random() * 100000) + ".mp4";
-                try {
-                    Files.copy(new File(originPath).toPath(), new File(videoPath).toPath());
-                    processedPath.add(videoPath);
-                    return processedPath;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return processedPath;
-                }
-            } else if (dividedMode == 1) {
-                videoRanges = props.getVideoRanges1();
-            } else {
-                videoRanges = props.getVideoRanges2();
-            }
-            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-            VideoCapture videoCapture = new VideoCapture(originPath);
-            int width = (int) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH);
-            int height = (int) videoCapture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-            int fps = (int) videoCapture.get(Videoio.CAP_PROP_FPS);
-            int totalFrames = (int) videoCapture.get(Videoio.CV_CAP_PROP_FRAME_COUNT);
-
-            //定义VideoWriter
-            List<VideoWriter> videoWriters = new ArrayList<>();
-            List<Integer> rowStart = new ArrayList<>();
-            List<Integer> rowEnd = new ArrayList<>();
-            List<Integer> colStart = new ArrayList<>();
-            List<Integer> colEnd = new ArrayList<>();
-            for (int i = 0; i < videoRanges.size(); i++) {
-                String videoPath = outputPath + "/" + System.currentTimeMillis() + (int) (Math.random() * 100000) + ".mp4";
-                VideoRange videoRange = videoRanges.get(i);
-                Size size = new Size(videoRange.getXRange() * width, videoRange.getYRange() * height);
-                //h5 video标签支持avc编码器的mp4
-                VideoWriter videoWriter = new VideoWriter(videoPath, VideoWriter.fourcc('a', 'v', 'c', '1'), fps, size);
-                videoWriters.add(videoWriter);
-                rowStart.add((int) (height * videoRange.getY1()));
-                rowEnd.add((int) (height * videoRange.getY2()));
-                colStart.add((int) (width * videoRange.getX1()));
-                colEnd.add((int) (width * videoRange.getX2()));
-                processedPath.add(videoPath);
-            }
-            //一帧一帧处理避免内存不足
-            for (int i = 1; i <= totalFrames; i++) {
-                Mat mat = new Mat();
-                videoCapture.set(Videoio.CAP_PROP_POS_FRAMES, i);
-                videoCapture.read(mat);
-                //视频提取的最后几帧可能是空帧，原因不明
-                if (mat.rows() == 0 || mat.cols() == 0) {
-                    System.out.println("loss frames = " + totalFrames + " - " + (i - 1) + " = " + (totalFrames - i + 1));
-                    mat.release();
-                    break;
-                }
-                for (int j = 0; j < videoWriters.size(); j++) {
-                    Mat subMat = mat.submat(rowStart.get(j), rowEnd.get(j), colStart.get(j), colEnd.get(j));
-                    videoWriters.get(j).write(subMat);
-                    subMat.release();
-                }
-                mat.release();
-            }
-            videoWriters.forEach(VideoWriter::release);
-            videoCapture.release();
-            return processedPath;
-        } catch (TiansiException e) {
-            e.printStackTrace();
-        }
-        return processedPath;
-    }
-
-    /**
-     * 判断是否视频格式
-     *
-     * @param name 文件名称
-     * @return 是否视频格式
-     */
-    private boolean isVideo(String name) {
-        String suffix = name.substring(name.lastIndexOf(".") + 1);
-        for (String videoType : props.getVideoTypes()) {
-            if (suffix.equalsIgnoreCase(videoType)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 获取切割模式
-     *
-     * @param originPath 路径
-     * @return 切割模式
-     * @throws TiansiException TiansiException
-     */
-    private int getDividedMode(String originPath) throws TiansiException {
-        if (originPath.toLowerCase().contains("150.120.0.10")) {
-            return 0;
-        } else if (originPath.toLowerCase().contains("150.120.30.4") || originPath.toLowerCase().contains("150.120.30.21")
-                || originPath.toLowerCase().contains("150.120.30.23")) {
-            return 1;
-        } else if (originPath.toLowerCase().contains("150.120.30.12") || originPath.toLowerCase().contains("150.120.30.16")
-                || originPath.toLowerCase().contains("150.120.202.202")) {
-            return 2;
-        } else if (originPath.toLowerCase().contains("150.120.30.19")) {
-            if (originPath.toLowerCase().contains("150.120.30.19_01_201706") || originPath.toLowerCase().contains("150.120.30.19_01_201707")
-                    || originPath.toLowerCase().contains("150.120.30.19_01_201708") || originPath.toLowerCase().contains("150.120.30.19_01_201709")) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else {
-            throw new TiansiException(ErrorCode.INVALID_CONFIG, "Unknown divided mode");
-        }
-    }
-
-    private String generateDividedPath() {
-        String dividedPath = props.getVideoHome() + "/" + DateUtil.getDay();
-        File file = new File(dividedPath);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        return dividedPath;
     }
 
     private List<OriginVideo> getUndivided() {

@@ -2,7 +2,7 @@ package com.tiansi.annotation.controller;
 
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.service.OriginVideoService;
-import com.tiansi.annotation.util.TiansiResponseBody;
+import com.tiansi.annotation.model.TiansiResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -65,7 +65,8 @@ public class OriginVideoController {
 
     @RequestMapping(value = "/divide", method = RequestMethod.GET)
     @ApiOperation(value = "分割视频")
-    public void divide() {
+    public TiansiResponseBody divide() {
         originVideoService.divide(users);
+        return new TiansiResponseBody();
     }
 }

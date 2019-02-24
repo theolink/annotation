@@ -3,6 +3,8 @@ package com.tiansi.annotation.domain;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class Clips {
 	private Long id;
@@ -14,6 +16,7 @@ public class Clips {
 	private String tag;
 	private Integer tagged;
 	private Long tagger;
+	private Date tagDate;
 
 	@TableLogic
 	private Integer isDeleted;

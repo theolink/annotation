@@ -2,10 +2,8 @@ package com.tiansi.annotation.service;
 
 import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Users;
-import com.tiansi.annotation.util.DateUtil;
-import com.tiansi.annotation.util.Props;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.validator.constraints.URL;
+import com.tiansi.annotation.model.Props;
+import com.tiansi.annotation.domain.body.OriginVideoUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,8 @@ public class OriginVideoServiceTest {
     private Props props;
     @Autowired
     private OriginVideoService originVideoService;
+    @Autowired
+    private OriginVideoUtil originVideoUtil;
 
     @Test
     public void pathTest() {
@@ -58,6 +58,6 @@ public class OriginVideoServiceTest {
         originVideos.add(originVideo);
         Users users = new Users();
         users.setId(1L);
-        System.out.println(originVideoService.divide(originVideos, users));
+        originVideoUtil.divide(originVideos);
     }
 }
