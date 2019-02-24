@@ -23,13 +23,13 @@ public class OriginVideoController {
     private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
     @RequestMapping(value = "/scan", method = RequestMethod.GET)
-    @ApiOperation(value = "扫描视频")
+    @ApiOperation(value = "扫描原始视频")
     public TiansiResponseBody scan() {
         return new TiansiResponseBody(originVideoService.scan(users));
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    @ApiOperation(value = "扫描视频")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除原始视频")
     @ApiImplicitParam(name = "ids", value = "庭审ids", paramType = "query", dataType = "List<Long>")
     public TiansiResponseBody delete(@RequestParam List<Long> ids) {
         return new TiansiResponseBody(originVideoService.delete(ids));
@@ -64,7 +64,7 @@ public class OriginVideoController {
     }
 
     @RequestMapping(value = "/divide", method = RequestMethod.GET)
-    @ApiOperation(value = "分割视频")
+    @ApiOperation(value = "分割原始视频")
     public TiansiResponseBody divide() {
         originVideoService.divide(users);
         return new TiansiResponseBody();

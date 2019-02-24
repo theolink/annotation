@@ -22,15 +22,15 @@ public class VideoController {
     private VideoService videoService;
     private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    @ApiOperation(value = "扫描视频")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除视频")
     @ApiImplicitParam(name = "ids", value = "庭审ids", paramType = "query", dataType = "List<Long>")
     public TiansiResponseBody delete(@RequestParam List<Long> ids) {
         return new TiansiResponseBody(videoService.delete(ids));
     }
 
     @RequestMapping(value = "/find", method = RequestMethod.GET)
-    @ApiOperation(value = "查找原始视频")
+    @ApiOperation(value = "查找视频")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "视频id", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "trialId", value = "庭审id", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "name", value = "视频名称", paramType = "query", dataType = "String"),

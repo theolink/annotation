@@ -3,7 +3,7 @@ package com.tiansi.annotation.service;
 import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.model.Props;
-import com.tiansi.annotation.domain.body.OriginVideoUtil;
+import com.tiansi.annotation.util.OriginVideoUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

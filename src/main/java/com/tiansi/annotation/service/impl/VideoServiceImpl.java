@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.domain.Video;
+import com.tiansi.annotation.domain.body.VideoRequestBody;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.mapper.VideoMapper;
@@ -62,7 +63,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         currentPage = currentPage != null && currentPage > 0 ? currentPage : 1;
         pageSize = pageSize != null && pageSize > 0 ? pageSize : 10;
         Page<Video> page = new Page<>(currentPage, pageSize);
-        return (Page) page(page, queryWrapper);
+        page = (Page<Video>) page(page, queryWrapper);
+        Page<VideoRequestBody> videoRequestBodyPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        videoRequestBodyPage.setPages(page.getPages()).setRecords(VideoRequestBody.fromVideos(page.getRecords()));
+        return videoRequestBodyPage;
     }
 
 

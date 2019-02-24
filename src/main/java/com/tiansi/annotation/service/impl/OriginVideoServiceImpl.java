@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Trial;
 import com.tiansi.annotation.domain.Users;
-import com.tiansi.annotation.domain.body.OriginVideoUtil;
+import com.tiansi.annotation.util.OriginVideoUtil;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.mapper.OriginVideoMapper;

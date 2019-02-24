@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -34,6 +35,8 @@ public class VideoRequestBody {
     private Integer tagged;
     @ApiModelProperty(value = "区间信息标注者id", name = "tagger", dataType = "Long", hidden = true)
     private Long tagger;
+    @ApiModelProperty(value = "区间信息标注日期", name = "tagDate", dataType = "Date", hidden = true)
+    private Date tagDate;
     @ApiModelProperty(value = "分段信息列表", name = "clipsInfo", dataType = "List<NumPair>", required = true,
             example = "[{start:23.5,end:45.6},{start:67,end:99}]")
     private List<NumPair> clipsInfo;
@@ -48,14 +51,15 @@ public class VideoRequestBody {
         video.setLength(this.getLength());
         video.setTagged(this.getTagged());
         video.setTagger(this.getTagger());
+        video.setTagDate(this.getTagDate());
         video.setClipsInfo(JSON.toJSONString(this.getClipsInfo()));
         return video;
     }
 
     public static List<VideoRequestBody> fromVideos(List<Video> videos) {
-        List<VideoRequestBody> videoClips = new ArrayList<>();
-        videos.forEach(video -> videoClips.add(new VideoRequestBody(video)));
-        return videoClips;
+        List<VideoRequestBody> videoRequestBodies = new ArrayList<>();
+        videos.forEach(video -> videoRequestBodies.add(new VideoRequestBody(video)));
+        return videoRequestBodies;
     }
 
     public static List<Video> toVideos(List<VideoRequestBody> videoRequestBodyList) {
@@ -74,6 +78,7 @@ public class VideoRequestBody {
             this.setLength(video.getLength());
             this.setTagged(video.getTagged());
             this.setTagger(video.getTagger());
+            this.setTagDate(video.getTagDate());
             this.setClipsInfo(JSONObject.parseArray(video.getClipsInfo(), NumPair.class));
         }
     }
