@@ -144,7 +144,9 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         currentPage = currentPage != null && currentPage > 0 ? currentPage : 1;
         pageSize = pageSize != null && pageSize > 0 ? pageSize : 10;
         Page<OriginVideo> page = new Page<>(currentPage, pageSize);
-        return (Page) page(page, queryWrapper);
+        page=(Page<OriginVideo>) page(page, queryWrapper);
+        System.out.println(page.getRecords().get(0).getId());
+        return page;
     }
 
     @Override

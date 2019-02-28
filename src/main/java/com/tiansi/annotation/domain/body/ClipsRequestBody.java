@@ -1,5 +1,7 @@
 package com.tiansi.annotation.domain.body;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tiansi.annotation.domain.Clips;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,10 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel(value = "ClipsRequestBody对象", description = "clips对象的请求体")
 public class ClipsRequestBody {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "clips的id", name = "id", dataType = "Long", required = true, example = "1234326723")
     private Long id;
     @ApiModelProperty(value = "片段名称", name = "name", dataType = "String", hidden = true)
     private String name;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "视频ID", name = "videoId", dataType = "Long", hidden = true)
     private Long videoId;
     @ApiModelProperty(value = "片段帧数", name = "frameNum", dataType = "Integer", hidden = true)
@@ -30,6 +34,7 @@ public class ClipsRequestBody {
     private String tag;
     @ApiModelProperty(value = "标注状态；0：未标注，1：标注中，2：已标注", name = "tagged", dataType = "Integer", hidden = true)
     private Integer tagged;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "标注者Id", name = "tagger", dataType = "Long", hidden = true)
     private Long tagger;
     @ApiModelProperty(value = "区间信息标注日期", name = "tagDate", dataType = "Date", hidden = true)
