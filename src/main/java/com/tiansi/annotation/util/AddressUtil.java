@@ -22,6 +22,10 @@ public class AddressUtil {
         return address.replace("\\", "/");
     }
 
+    public String disFormat(String address) {
+        return address.replace("/", "\\");
+    }
+
     public String getFileName(String path) {
         path = addressFormat(path);
         int start = path.lastIndexOf('/');

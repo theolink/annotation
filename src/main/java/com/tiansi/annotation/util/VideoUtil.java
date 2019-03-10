@@ -41,6 +41,7 @@ public class VideoUtil {
      */
     @Async
     public void cutVideo(Video video) throws TiansiException {
+
         String clipHome = props.getClipHome();
         int step = props.getStepSize();
         if (video == null) {
@@ -84,7 +85,7 @@ public class VideoUtil {
                     clips.setAddress(addressUtil.toServerAddress(zipFilePath));
                     clips.setFrameNum(frameNum);
                     clips.setVideoId(video.getId());
-                    clips.setName("video-" + video.getId() + "-" + clipName);
+                    clips.setName(clipName);
                     clipsService.save(clips);
                 } catch (Exception e) {
                     throw new TiansiException(ErrorCode.FILE_OPERATION_ERROR, e.getMessage());
@@ -105,6 +106,7 @@ public class VideoUtil {
      * @apiNote 生成帧文件
      */
     private Integer interceptFrame(String videoPath, String outputPath, double start, double end, int step) {
+        videoPath=addressUtil.disFormat(addressUtil.toLocalAddress(videoPath));
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture(videoPath);
         int frameNum = 0;

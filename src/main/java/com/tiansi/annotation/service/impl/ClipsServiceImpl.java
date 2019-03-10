@@ -97,7 +97,7 @@ public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements
         originClips.setTagger(processor.getId());
         originClips.setTagged(2);
         originClips.setTagDate(new Date());
-        return save(originClips);
+        return updateById(originClips);
     }
 
     @Override

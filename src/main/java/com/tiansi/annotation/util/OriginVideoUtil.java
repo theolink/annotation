@@ -101,6 +101,7 @@ public class OriginVideoUtil {
             } else {
                 videoRanges = props.getVideoRanges2();
             }
+            originPath=addressUtil.disFormat(addressUtil.toLocalAddress(originPath));
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             VideoCapture videoCapture = new VideoCapture(originPath);
             int width = (int) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH);

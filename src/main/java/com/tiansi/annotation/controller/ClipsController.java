@@ -90,6 +90,7 @@ public class ClipsController {
     @ApiOperation(value = "标记，保存标记信息")
     public TiansiResponseBody tag(@RequestBody @ApiParam(name = "ClipsRequestBody对象", value = "传入JSON格式", required = true)
                                           ClipsRequestBody clipsRequestBody) {
+        System.out.println("tag:"+clipsRequestBody.getTag());
         try {
             return new TiansiResponseBody(clipsService.tag(clipsRequestBody.toClips(), users));
         } catch (TiansiException e) {

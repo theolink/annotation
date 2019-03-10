@@ -33,7 +33,7 @@ CREATE TABLE clips
   frame_num   INT(10) COMMENT '帧数',
   address     VARCHAR(256) COMMENT '帧文件地址',
   xml_address VARCHAR(256) COMMENT 'XML文件地址',
-  tag         VARCHAR(20000) COMMENT '标签JSON',
+  tag         TEXT COMMENT '标签JSON',
   tagged      INT(1) DEFAULT 0 COMMENT '是否已标注,0未标注，1标注中，2已标注',
   tagger      INT(20) COMMENT '标注者ID',
   tag_date datetime  COMMENT '标签标注时间',
