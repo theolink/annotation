@@ -52,8 +52,8 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
   id       BIGINT(20) PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
-  username VARCHAR(30) COMMENT '用户名',
-  password VARCHAR(30) COMMENT '密码',
+  username VARCHAR(255) COMMENT '用户名',
+  password VARCHAR(255) COMMENT '密码',
   role     VARCHAR(30) COMMENT '角色',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );
@@ -69,5 +69,13 @@ CREATE TABLE origin_video
   pre_deal INT(1) DEFAULT 0 COMMENT '视频预处理状态,0：未处理，1：处理中，2：已处理',
   pre_dealer BIGINT(20) COMMENT '预处理执行者ID',
   pre_deal_date datetime  COMMENT '预处理执行时间',
+  divide_type BIGINT(20) COMMENT '分割类型ID',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
+);
+DROP TABLE IF EXISTS divide_type;
+CREATE TABLE divide_type
+(
+  id       BIGINT(20) PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+  name VARCHAR(256) COMMENT '名称',
+  video_ranges VARCHAR(256) COMMENT '分割格式'
 );

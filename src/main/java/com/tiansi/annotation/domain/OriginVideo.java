@@ -23,6 +23,7 @@ public class OriginVideo {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long preDealer;
     private Date preDealDate;
+    private Long divideType;
 
     @TableLogic
     private Integer isDeleted;
