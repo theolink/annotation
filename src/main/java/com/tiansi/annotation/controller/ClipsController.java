@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class ClipsController {
     @Autowired
     private ClipsService clipsService;
-    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
+//    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除片段")
@@ -89,10 +90,10 @@ public class ClipsController {
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
     @ApiOperation(value = "标记，保存标记信息")
     public TiansiResponseBody tag(@RequestBody @ApiParam(name = "ClipsRequestBody对象", value = "传入JSON格式", required = true)
-                                          ClipsRequestBody clipsRequestBody) {
+                                          ClipsRequestBody clipsRequestBody, Principal principal) {
         System.out.println("tag:"+clipsRequestBody.getTag());
         try {
-            return new TiansiResponseBody(clipsService.tag(clipsRequestBody.toClips(), users));
+            return new TiansiResponseBody(clipsService.tag(clipsRequestBody.toClips(), (Users) principal));
         } catch (TiansiException e) {
             return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
         }

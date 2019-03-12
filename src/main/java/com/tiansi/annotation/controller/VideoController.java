@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +22,7 @@ import java.util.List;
 public class VideoController {
     @Autowired
     private VideoService videoService;
-    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
+//    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除视频")
@@ -95,9 +97,9 @@ public class VideoController {
     @RequestMapping(value = "/segment", method = RequestMethod.POST)
     @ApiOperation(value = "分割区间，保存视频的AB区间信息")
     public TiansiResponseBody segment(@RequestBody @ApiParam(name = "VideoRequestBody对象", value = "传入JSON格式", required = true)
-                                              VideoRequestBody videoRequestBody) {
+                                              VideoRequestBody videoRequestBody, Principal principal) {
         try {
-            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(), users));
+            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(), (Users) principal));
         } catch (TiansiException e) {
             return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
         }

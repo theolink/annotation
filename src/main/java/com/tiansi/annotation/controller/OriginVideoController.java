@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,12 +21,12 @@ import java.util.List;
 public class OriginVideoController {
     @Autowired
     private OriginVideoService originVideoService;
-    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
+//    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
     @RequestMapping(value = "/scan", method = RequestMethod.GET)
     @ApiOperation(value = "扫描原始视频")
-    public TiansiResponseBody scan() {
-        return new TiansiResponseBody(originVideoService.scan(users));
+    public TiansiResponseBody scan(Principal principal) {
+        return new TiansiResponseBody(originVideoService.scan((Users)principal));
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
@@ -65,8 +66,8 @@ public class OriginVideoController {
 
     @RequestMapping(value = "/divide", method = RequestMethod.GET)
     @ApiOperation(value = "分割原始视频")
-    public TiansiResponseBody divide() {
-        originVideoService.divide(users);
+    public TiansiResponseBody divide(Principal principal) {
+        originVideoService.divide((Users)principal);
         return new TiansiResponseBody();
     }
 }

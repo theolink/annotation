@@ -24,4 +24,12 @@ public class UserServiceTest {
         userService.updateById(users);
         System.out.println(after);
     }
+    @Test
+    public void generateAccount(){
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        Users gxh=new Users(null,"gxh",bCryptPasswordEncoder.encode("123456"),"ADMIN",0);
+        Users wym=new Users(null,"wym",bCryptPasswordEncoder.encode("123456"),"ADMIN",0);
+        userService.save(gxh);
+        userService.save(wym);
+    }
 }
