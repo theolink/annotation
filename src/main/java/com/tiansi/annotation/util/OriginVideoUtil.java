@@ -2,14 +2,10 @@ package com.tiansi.annotation.util;
 
 import com.tiansi.annotation.domain.*;
 import com.tiansi.annotation.domain.body.DivideTypeRequestBody;
-import com.tiansi.annotation.exception.ErrorCode;
-import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.service.DivideTypeService;
 import com.tiansi.annotation.service.OriginVideoService;
 import com.tiansi.annotation.service.TrialService;
 import com.tiansi.annotation.service.VideoService;
-import com.tiansi.annotation.util.AddressUtil;
-import com.tiansi.annotation.util.DateUtil;
 import com.tiansi.annotation.model.Props;
 import com.tiansi.annotation.model.VideoRange;
 import org.opencv.core.Core;
@@ -101,7 +97,7 @@ public class OriginVideoUtil {
                 return processedPath;
             }
         }
-       // originPath = addressUtil.disFormat(addressUtil.toLocalAddress(originPath));
+        // originPath = addressUtil.disFormat(addressUtil.toLocalAddress(originPath));
         originPath = addressUtil.toLocalAddress(originPath);
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture(originPath);
@@ -173,36 +169,6 @@ public class OriginVideoUtil {
             }
         }
         return false;
-    }
-
-    //TODO 图像边界检测获取切割模式
-
-    /**
-     * 获取切割模式
-     *
-     * @param originPath 路径
-     * @return 切割模式
-     * @throws TiansiException TiansiException
-     */
-    private int getDividedMode(String originPath) throws TiansiException {
-        if (originPath.toLowerCase().contains("150.120.0.10")) {
-            return 0;
-        } else if (originPath.toLowerCase().contains("150.120.30.4") || originPath.toLowerCase().contains("150.120.30.21")
-                || originPath.toLowerCase().contains("150.120.30.23")) {
-            return 1;
-        } else if (originPath.toLowerCase().contains("150.120.30.12") || originPath.toLowerCase().contains("150.120.30.16")
-                || originPath.toLowerCase().contains("150.120.202.202")) {
-            return 2;
-        } else if (originPath.toLowerCase().contains("150.120.30.19")) {
-            if (originPath.toLowerCase().contains("150.120.30.19_01_201706") || originPath.toLowerCase().contains("150.120.30.19_01_201707")
-                    || originPath.toLowerCase().contains("150.120.30.19_01_201708") || originPath.toLowerCase().contains("150.120.30.19_01_201709")) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else {
-            throw new TiansiException(ErrorCode.INVALID_CONFIG, "Unknown divided mode");
-        }
     }
 
     /**

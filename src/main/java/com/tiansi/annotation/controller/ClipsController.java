@@ -1,19 +1,16 @@
 package com.tiansi.annotation.controller;
 
-import com.tiansi.annotation.domain.Clips;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.domain.body.ClipsRequestBody;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.model.TiansiResponseBody;
 import com.tiansi.annotation.service.ClipsService;
-import com.tiansi.annotation.model.Result;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 

@@ -3,7 +3,6 @@ package com.tiansi.annotation.controller;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.service.VideoService;
-import com.tiansi.annotation.model.Result;
 import com.tiansi.annotation.model.TiansiResponseBody;
 import com.tiansi.annotation.domain.body.VideoRequestBody;
 import io.swagger.annotations.*;
@@ -12,8 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
-import java.security.Principal;
+
 import java.util.Date;
 import java.util.List;
 
@@ -59,11 +57,12 @@ public class VideoController {
     public TiansiResponseBody segment(@RequestBody @ApiParam(name = "VideoRequestBody对象", value = "传入JSON格式", required = true)
                                               VideoRequestBody videoRequestBody, Authentication authentication) {
         try {
-            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(),(Users) authentication.getPrincipal()));
+            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(), (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
         }
     }
+
     @RequestMapping(value = "/assign", method = RequestMethod.GET)
     @ApiOperation(value = "分配“设置类型”任务")
     @ApiImplicitParam(name = "amount", value = "分配任务数量", paramType = "query", dataType = "Integer")

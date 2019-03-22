@@ -1,11 +1,9 @@
 package com.tiansi.annotation.model;
 
-import com.tiansi.annotation.model.VideoRange;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
 @Data
@@ -20,6 +18,4 @@ public class Props {
     private int stepSize;
     private String serverAddress;
     private String[] videoTypes;
-//    private List<VideoRange> videoRanges1;
-//    private List<VideoRange> videoRanges2;
 }

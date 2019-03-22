@@ -3,7 +3,6 @@ package com.tiansi.annotation.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.domain.body.UserRequestBody;
 import com.tiansi.annotation.exception.ErrorCode;
@@ -47,7 +46,6 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         return save(users);
     }
 
-    //TODO 删除后系列操作
     @Override
     public boolean delete(Long id, Users users) throws TiansiException {
         if (!(id.equals(users.getId()) || users.getRole().equals("ADMIN"))) {

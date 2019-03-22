@@ -7,7 +7,6 @@ import com.tiansi.annotation.model.TiansiResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class TiansiAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Users users = (Users) authentication.getPrincipal();
 
-        UserRequestBody userRequestBody=new UserRequestBody(users);
+        UserRequestBody userRequestBody = new UserRequestBody(users);
         TiansiResponseBody tiansiResponseBody = new TiansiResponseBody(userRequestBody);
         tiansiResponseBody.setStatus("200");
         tiansiResponseBody.setMsg("Login Success!");

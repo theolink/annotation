@@ -24,6 +24,7 @@ public class OriginVideo {
     private Long preDealer;
     private Date preDealDate;
     private Long divideType;
+    private String typeName;
     private String imgPath;
 
     @TableLogic

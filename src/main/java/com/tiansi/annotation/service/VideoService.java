@@ -20,8 +20,9 @@ public interface VideoService extends IService<Video> {
 
     /**
      * 分配任务
+     *
      * @param amount 任务数量
      * @return 是否成功
      */
-    int assign(Integer amount,Users users);
+    int assign(Integer amount, Users users);
 }

@@ -1,6 +1,5 @@
 package com.tiansi.annotation.domain.body;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tiansi.annotation.domain.Clips;
 import io.swagger.annotations.ApiModel;

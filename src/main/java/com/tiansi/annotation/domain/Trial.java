@@ -7,12 +7,12 @@ import java.util.Date;
 
 @Data
 public class Trial {
-	private Long id;
-	private String name;
-	private Integer videoNum;
-	private Date uploadDate;
-	private Long uploader;
+    private Long id;
+    private String name;
+    private Integer videoNum;
+    private Date uploadDate;
+    private Long uploader;
 
-	@TableLogic
-	private Integer isDeleted;
+    @TableLogic
+    private Integer isDeleted;
 }

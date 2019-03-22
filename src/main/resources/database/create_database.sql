@@ -70,6 +70,7 @@ CREATE TABLE origin_video
   pre_dealer BIGINT(20) COMMENT '预处理执行者ID',
   pre_deal_date datetime  COMMENT '预处理执行时间',
   divide_type BIGINT(20) COMMENT '分割类型ID',
+  type_name VARCHAR(256) COMMENT '分割类型名称',
   img_path  VARCHAR(256) COMMENT '原始视频截图地址',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );

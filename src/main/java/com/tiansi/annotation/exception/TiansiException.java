@@ -11,10 +11,12 @@ public class TiansiException extends Exception {
     public TiansiException(String message) {
         super(message);
     }
-    public TiansiException(int errorCode,String message) {
+
+    public TiansiException(int errorCode, String message) {
         super(message);
-        this.errorCode=errorCode;
+        this.errorCode = errorCode;
     }
+
     public int getErrorCode() {
         return errorCode;
     }

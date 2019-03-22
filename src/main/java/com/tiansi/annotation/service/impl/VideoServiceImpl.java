@@ -3,7 +3,6 @@ package com.tiansi.annotation.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tiansi.annotation.domain.OriginVideo;
 import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.domain.Video;
 import com.tiansi.annotation.domain.body.VideoRequestBody;
@@ -13,7 +12,6 @@ import com.tiansi.annotation.mapper.VideoMapper;
 import com.tiansi.annotation.service.VideoService;
 
 import com.tiansi.annotation.util.*;
-import org.opencv.text.ERFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;

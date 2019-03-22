@@ -1,6 +1,7 @@
 package com.tiansi.annotation.controller;
 
 import com.tiansi.annotation.domain.Users;
+import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.service.OriginVideoService;
 import com.tiansi.annotation.model.TiansiResponseBody;
 import io.swagger.annotations.Api;
@@ -12,7 +13,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -80,23 +80,23 @@ public class OriginVideoController {
             @ApiImplicitParam(name = "typeId", value = "类型id", paramType = "query", dataType = "Long"),
     })
     public TiansiResponseBody type(@RequestParam Long id, @RequestParam Long typeId) {
-        return new TiansiResponseBody(originVideoService.type(id, typeId));
-    }
-
-    @RequestMapping(value = "/types", method = RequestMethod.POST)
-    @ApiOperation(value = "设置原始视频分割类型")
-    @ApiImplicitParam(name = "typeList", value = "类型设置map; key: originVideoId, value: divideTypeId", paramType = "query", dataType = "Map<Long,Long>")
-    public TiansiResponseBody type(@RequestBody Map<Long, Long> typeList) {
-        return new TiansiResponseBody(originVideoService.type(typeList));
+        try {
+            return new TiansiResponseBody(originVideoService.type(id, typeId));
+        } catch (TiansiException e) {
+            return new TiansiResponseBody(e);
+        }
     }
 
     @RequestMapping(value = "/untyped", method = RequestMethod.GET)
     @ApiOperation(value = "取消原始视频分割类型")
     @ApiImplicitParam(name = "id", value = "原始视频id", paramType = "query", dataType = "Long")
     public TiansiResponseBody untyped(@RequestParam Long id, @RequestParam Long typeId) {
-        return new TiansiResponseBody(originVideoService.type(id, typeId));
+        try {
+            return new TiansiResponseBody(originVideoService.type(id, typeId));
+        } catch (TiansiException e) {
+            return new TiansiResponseBody(e);
+        }
     }
-
 
     @RequestMapping(value = "/assign", method = RequestMethod.GET)
     @ApiOperation(value = "分配“设置类型”任务")

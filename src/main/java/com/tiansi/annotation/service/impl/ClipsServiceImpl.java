@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tiansi.annotation.domain.Clips;
 import com.tiansi.annotation.domain.Users;
-import com.tiansi.annotation.domain.Video;
 import com.tiansi.annotation.domain.body.ClipsRequestBody;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
@@ -122,7 +121,7 @@ public class ClipsServiceImpl extends ServiceImpl<ClipsMapper, Clips> implements
         if (clipsList.isEmpty()) {
             return 0;
         }
-        if(updateBatchById(clipsList)){
+        if (updateBatchById(clipsList)) {
             return clipsList.size();
         }
         return 0;

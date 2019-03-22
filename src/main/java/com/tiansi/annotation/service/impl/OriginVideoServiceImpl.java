@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sun.org.apache.xpath.internal.operations.Div;
 import com.tiansi.annotation.domain.*;
 import com.tiansi.annotation.service.*;
 import com.tiansi.annotation.util.OriginVideoUtil;
@@ -215,50 +216,43 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         originVideoUtil.middleImgs(originVideos);
     }
 
+
     @Override
-    public int type(Map<Long, Long> typeMap) {
-        if (typeMap.size() == 0) {
-            return 0;
+    public boolean type(Long id, Long typeId) throws TiansiException {
+        if (id == null || typeId == null) {
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER, "Id and typeId can not be null !");
         }
-        List<OriginVideo> originVideos = new ArrayList<>();
-        List<Long> typeList = divideTypeService.getIds(divideTypeService.list(null));
-        typeMap.forEach((id, type) -> {
-            try {
-                originVideos.add(setType(id, type, typeList));
-            } catch (TiansiException e) {
-                e.printStackTrace();
-            }
-        });
-        updateBatchById(originVideos);
-        return originVideos.size();
+        DivideType divideType = divideTypeService.getById(typeId);
+        if (divideType == null) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "DivideType with id " + typeId + " not exist!");
+        }
+        OriginVideo originVideo = getById(id);
+        if (originVideo == null) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "OriginVideo with id " + id + " not exist!");
+        }
+        originVideo.setDivideType(typeId);
+        originVideo.setTypeName(divideType.getName());
+        originVideo.setPreDeal(2);
+        return updateById(originVideo);
     }
 
     @Override
-    public boolean type(Long id, Long typeId) {
-        List<Long> typeList = divideTypeService.getIds(divideTypeService.list(null));
-        try {
-            return updateById(setType(id, typeId, typeList));
-        } catch (TiansiException e) {
-            e.printStackTrace();
-            return false;
+    public boolean untyped(Long id) throws TiansiException {
+        if (id == null) {
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER, "Id can not be null !");
         }
-    }
-    @Override
-    public boolean untyped(Long id)throws TiansiException{
-        if(id==null){
-            throw new TiansiException(ErrorCode.INVALID_PARAMETER,"Id can not be null !");
+        OriginVideo originVideo = getById(id);
+        if (originVideo == null) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "OriginVideo with Id: " + id + " is not exist !");
         }
-        OriginVideo originVideo=getById(id);
-        if(originVideo==null){
-            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST,"OriginVideo with Id: "+id+" is not exist !");
-        }
-        if(!originVideo.getPreDeal().equals(2)){
-            throw new TiansiException(ErrorCode.INVALID_PARAMETER,"Only typed but not divided origin video can be untyped !");
+        if (!originVideo.getPreDeal().equals(2)) {
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER, "Only typed but not divided origin video can be untyped !");
         }
         originVideo.setPreDeal(1);
         originVideo.setDivideType(null);
         return updateById(originVideo);
     }
+
     @Override
     public int assign(Integer amount, Users users) {
         Page<OriginVideo> page = new Page<>(1, amount);
@@ -281,18 +275,6 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         return 0;
     }
 
-    private OriginVideo setType(Long id, Long type, List<Long> typeList) throws TiansiException {
-        if (typeList.indexOf(type) < 0) {
-            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "DivideType with id " + type + " not exist!");
-        }
-        OriginVideo originVideo = getById(id);
-        if (originVideo == null) {
-            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "OriginVideo with id " + id + " not exist!");
-        }
-        originVideo.setDivideType(type);
-        originVideo.setPreDeal(2);
-        return originVideo;
-    }
 
     private List<OriginVideo> getUndividedTyped(Users processor) {
         return list(new QueryWrapper<OriginVideo>().eq("pre_deal", 2).eq("pre_dealer", processor.getId()));

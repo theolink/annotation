@@ -1,6 +1,5 @@
 package com.tiansi.annotation.security;
 
-import com.tiansi.annotation.domain.Users;
 import com.tiansi.annotation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +40,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     } else {
 //                        jwtTokenUtil.del(authToken);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

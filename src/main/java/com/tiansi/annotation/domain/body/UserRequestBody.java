@@ -1,6 +1,5 @@
 package com.tiansi.annotation.domain.body;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tiansi.annotation.domain.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;

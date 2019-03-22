@@ -4,15 +4,10 @@ import com.tiansi.annotation.domain.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
 import java.io.Serializable;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
