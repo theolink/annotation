@@ -4,17 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tiansi.annotation.domain.OriginVideo;
-import com.tiansi.annotation.domain.Trial;
-import com.tiansi.annotation.domain.Users;
+import com.tiansi.annotation.domain.*;
+import com.tiansi.annotation.service.*;
 import com.tiansi.annotation.util.OriginVideoUtil;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
 import com.tiansi.annotation.mapper.OriginVideoMapper;
 import com.tiansi.annotation.model.Props;
-import com.tiansi.annotation.service.DirectoriesService;
-import com.tiansi.annotation.service.OriginVideoService;
-import com.tiansi.annotation.service.TrialService;
 import com.tiansi.annotation.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -25,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @EnableAsync
@@ -39,24 +36,37 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
     private AddressUtil addressUtil;
     @Autowired
     private OriginVideoUtil originVideoUtil;
+    @Autowired
+    private DivideTypeService divideTypeService;
+    @Autowired
+    private VideoService videoService;
 
     @Override
     public int scan(Users processor) {
         int videoNum = 0;
         try {
-            ArrayList<String> directoryNames = directoriesService.notScan();
+            // 扫描法庭视频文件夹
+            ArrayList<String> directoryNames = directoriesService.notScan(props.getOriginVideoHome());
             for (String directoryName : directoryNames) {
-                videoNum += scan(props.getOriginVideoHome() + "/" + directoryName, processor);
+                videoNum += scan(props.getOriginVideoHome() + "/" + directoryName, processor, null);
             }
             directoriesService.addDirectories(directoryNames);
+
+            //扫描扮演视频文件夹
+            ArrayList<String> undividedDirectoryNames = directoriesService.notScan(props.getUndividedVideoHome());
+            for (String undividedNames : undividedDirectoryNames) {
+                videoNum += scan(props.getUndividedVideoHome() + "/" + undividedNames, processor, 1);
+            }
+            directoriesService.addDirectories(undividedDirectoryNames);
         } catch (TiansiException e) {
             e.printStackTrace();
         }
+
         return videoNum;
     }
 
     @Override
-    public int scan(String path, Users processor) throws TiansiException {
+    public int scan(String path, Users processor, Integer mode) throws TiansiException {
 
         File directory = new File(path);
         if (!directory.isDirectory()) {
@@ -70,12 +80,11 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
             ArrayList<OriginVideo> originVideos = new ArrayList<>();
             for (int i = 0; i < fileList.length; i++) {
                 if (fileList[i].isDirectory()) {
-                    totalVideosNum += scan(fileList[i].getAbsolutePath(), processor);
+                    totalVideosNum += scan(fileList[i].getAbsolutePath(), processor, mode);
                 } else {
                     String fileName = fileList[i].getName();
                     if (originVideoUtil.isVideo(fileName)) {
                         String absolutePath = fileList[i].getAbsolutePath();
-                        System.out.println("absolutePath is :" + absolutePath);
                         String videoPath = addressUtil.toServerAddress(absolutePath);
                         String videoName = addressUtil.getFileName(videoPath);
                         OriginVideo originVideo = new OriginVideo();
@@ -88,12 +97,27 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
             }
             if (originVideos.size() > 0) {
                 String trialName = addressUtil.getTrialName(path);
-                System.out.println("trialName is:" + trialName);
                 Trial trial = new Trial();
                 trial.setName(trialName);
                 trial.setUploader(processor.getId());
                 Long trialId = trialService.insert(trial);
-                originVideos.forEach(originVideo -> originVideo.setTrialId(trialId));
+                if (mode == null) {
+                    originVideos.forEach(originVideo -> originVideo.setTrialId(trialId));
+                } else {
+                    Long divideType = divideTypeService.getOne(new QueryWrapper<DivideType>().eq("name", "一分")).getId();
+                    List<Video> videos = new ArrayList<>();
+                    originVideos.forEach(originVideo -> {
+                        originVideo.setTrialId(trialId);
+                        originVideo.setDivideType(divideType);
+                        originVideo.setPreDeal(4);
+                        Video video = new Video();
+                        video.setOriginVideoId(originVideo.getId());
+                        video.setName(originVideo.getName());
+                        video.setAddress(originVideo.getAddress());
+                        videos.add(video);
+                    });
+                    videoService.saveBatch(videos);
+                }
                 saveBatch(originVideos);
                 return originVideos.size() + totalVideosNum;
             } else {
@@ -114,13 +138,13 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         if (id != null) {
             queryWrapper = queryWrapper.eq("id", id);
         }
-        if (trialId != null ) {
+        if (trialId != null) {
             queryWrapper = queryWrapper.eq("trial_id", trialId);
         }
         if (!StringUtils.isEmpty(name)) {
             queryWrapper = queryWrapper.like("name", name);
         }
-        if (uploader != null ) {
+        if (uploader != null) {
             queryWrapper = queryWrapper.eq("uploader", uploader);
         }
         if (uploadDateStart != null) {
@@ -132,7 +156,7 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         if (preDeal != null) {
             queryWrapper = queryWrapper.eq("pre_deal", preDeal);
         }
-        if (preDealer != null ) {
+        if (preDealer != null) {
             queryWrapper = queryWrapper.eq("pre_dealer", preDealer);
         }
         if (preDealDateStart != null) {
@@ -144,14 +168,13 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
         currentPage = currentPage != null && currentPage > 0 ? currentPage : 1;
         pageSize = pageSize != null && pageSize > 0 ? pageSize : 10;
         Page<OriginVideo> page = new Page<>(currentPage, pageSize);
-        page=(Page<OriginVideo>) page(page, queryWrapper);
-        System.out.println(page.getRecords().get(0).getId());
+        page = (Page<OriginVideo>) page(page, queryWrapper);
         return page;
     }
 
     @Override
     public void divide(Users processor) {
-        List<OriginVideo> originVideos = getUndivided();
+        List<OriginVideo> originVideos = getUndividedTyped(processor);
         startDivide(getIds(originVideos), processor);
         originVideoUtil.divide(originVideos);
     }
@@ -159,23 +182,21 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
     @Override
     public void startDivide(Long originId, Users processor) {
         OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(1);
-        originVideo.setPreDealer(processor.getId());
+        originVideo.setPreDeal(3);
         update(originVideo, new UpdateWrapper<OriginVideo>().eq("id", originId));
     }
 
     @Override
     public void startDivide(List<Long> originIds, Users processor) {
         OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(1);
-        originVideo.setPreDealer(processor.getId());
+        originVideo.setPreDeal(3);
         update(originVideo, new UpdateWrapper<OriginVideo>().in("id", originIds));
     }
 
     @Override
     public void endDivide(Long originId) {
         OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(2);
+        originVideo.setPreDeal(4);
         originVideo.setPreDealDate(new Date());
         update(originVideo, new UpdateWrapper<OriginVideo>().eq("id", originId));
     }
@@ -183,13 +204,98 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
     @Override
     public void endDivide(List<Long> originIds) {
         OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(2);
+        originVideo.setPreDeal(4);
         originVideo.setPreDealDate(new Date());
         update(originVideo, new UpdateWrapper<OriginVideo>().in("id", originIds));
     }
 
-    private List<OriginVideo> getUndivided() {
-        return list(new QueryWrapper<OriginVideo>().eq("pre_deal", 0));
+    @Override
+    public void middleImg() {
+        List<OriginVideo> originVideos = list(new QueryWrapper<OriginVideo>().isNull("img_path"));
+        originVideoUtil.middleImgs(originVideos);
+    }
+
+    @Override
+    public int type(Map<Long, Long> typeMap) {
+        if (typeMap.size() == 0) {
+            return 0;
+        }
+        List<OriginVideo> originVideos = new ArrayList<>();
+        List<Long> typeList = divideTypeService.getIds(divideTypeService.list(null));
+        typeMap.forEach((id, type) -> {
+            try {
+                originVideos.add(setType(id, type, typeList));
+            } catch (TiansiException e) {
+                e.printStackTrace();
+            }
+        });
+        updateBatchById(originVideos);
+        return originVideos.size();
+    }
+
+    @Override
+    public boolean type(Long id, Long typeId) {
+        List<Long> typeList = divideTypeService.getIds(divideTypeService.list(null));
+        try {
+            return updateById(setType(id, typeId, typeList));
+        } catch (TiansiException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @Override
+    public boolean untyped(Long id)throws TiansiException{
+        if(id==null){
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER,"Id can not be null !");
+        }
+        OriginVideo originVideo=getById(id);
+        if(originVideo==null){
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST,"OriginVideo with Id: "+id+" is not exist !");
+        }
+        if(!originVideo.getPreDeal().equals(2)){
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER,"Only typed but not divided origin video can be untyped !");
+        }
+        originVideo.setPreDeal(1);
+        originVideo.setDivideType(null);
+        return updateById(originVideo);
+    }
+    @Override
+    public int assign(Integer amount, Users users) {
+        Page<OriginVideo> page = new Page<>(1, amount);
+        page = (Page<OriginVideo>) page(page, new QueryWrapper<OriginVideo>().eq("pre_deal", 0));
+        List<OriginVideo> originVideos = page.getRecords();
+        originVideos.forEach(originVideo -> {
+            if (originVideo.getDivideType() == null) {
+                originVideo.setPreDeal(1);
+            } else {
+                originVideo.setPreDeal(2);
+            }
+            originVideo.setPreDealer(users.getId());
+        });
+        if (originVideos.isEmpty()) {
+            return 0;
+        }
+        if (updateBatchById(originVideos)) {
+            return originVideos.size();
+        }
+        return 0;
+    }
+
+    private OriginVideo setType(Long id, Long type, List<Long> typeList) throws TiansiException {
+        if (typeList.indexOf(type) < 0) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "DivideType with id " + type + " not exist!");
+        }
+        OriginVideo originVideo = getById(id);
+        if (originVideo == null) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "OriginVideo with id " + id + " not exist!");
+        }
+        originVideo.setDivideType(type);
+        originVideo.setPreDeal(2);
+        return originVideo;
+    }
+
+    private List<OriginVideo> getUndividedTyped(Users processor) {
+        return list(new QueryWrapper<OriginVideo>().eq("pre_deal", 2).eq("pre_dealer", processor.getId()));
     }
 
     private List<Long> getIds(List<OriginVideo> originVideos) {

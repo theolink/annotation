@@ -1,8 +1,12 @@
 package com.tiansi.annotation.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class VideoRange {
     private double x1;
     private double x2;

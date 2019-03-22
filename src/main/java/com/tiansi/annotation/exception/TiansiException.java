@@ -21,7 +21,6 @@ public class TiansiException extends Exception {
 
     @Override
     public void printStackTrace() {
-        System.out.println("errorCode: " + this.errorCode);
         super.printStackTrace();
     }
 }

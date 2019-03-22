@@ -16,16 +16,12 @@ public interface VideoService extends IService<Video> {
     Page find(Long id, Long trialId, String name, Long originVideoId, Integer tagged, Long tagger, Date tagDateStart,
               Date tagDateEnd, Integer currentPage, Integer pageSize);
 
-    List<Video> findAll();
-
-    List<Video> findUntagged();
-
-    List<Video> findSomeones(Long userId);
-
-    List<Video> findSomeonesTagged(Long userId);
-
-    List<Video> findSomeonesTagging(Long userId);
-
     boolean segment(Video segmentVideo, Users processor) throws TiansiException;
 
+    /**
+     * 分配任务
+     * @param amount 任务数量
+     * @return 是否成功
+     */
+    int assign(Integer amount,Users users);
 }

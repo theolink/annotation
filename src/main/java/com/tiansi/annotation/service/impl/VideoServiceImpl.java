@@ -13,6 +13,7 @@ import com.tiansi.annotation.mapper.VideoMapper;
 import com.tiansi.annotation.service.VideoService;
 
 import com.tiansi.annotation.util.*;
+import org.opencv.text.ERFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -69,43 +70,20 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         return videoRequestBodyPage;
     }
 
-
-    @Override
-    public List<Video> findAll() {
-        return this.list(null);
-    }
-
-    @Override
-    public List<Video> findUntagged() {
-        return this.list(new QueryWrapper<Video>().eq("tagged", 0));
-    }
-
-    @Override
-    public List<Video> findSomeones(Long userId) {
-        return this.list(new QueryWrapper<Video>().eq("tagger", userId));
-    }
-
-    @Override
-    public List<Video> findSomeonesTagged(Long userId) {
-        return this.list(new QueryWrapper<Video>().eq("tagger", userId).eq("tagged", 2));
-    }
-
-    @Override
-    public List<Video> findSomeonesTagging(Long userId) {
-        return this.list(new QueryWrapper<Video>().eq("tagger", userId).eq("tagged", 1));
-    }
-
     @Override
     public boolean segment(Video segmentVideo, Users processor) throws TiansiException {
+
         if (segmentVideo == null || segmentVideo.getId() == null) {
             throw new TiansiException(ErrorCode.INVALID_PARAMETER, "video and videoId can not be null !");
+        }
+        if (!segmentVideo.getTagger().equals(processor.getId())) {
+            throw new TiansiException(ErrorCode.LIMITED_AUTHORITY, "No authority to segment other user's video !");
         }
         Video video = getById(segmentVideo.getId());
         if (video == null) {
             throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "Video whose id is " + segmentVideo.getId() + " doesn't exist!");
         }
         video.setClipsInfo(segmentVideo.getClipsInfo());
-        video.setTagger(processor.getId());
         video.setTagged(1);
         video.setTagDate(new Date());
         boolean result = updateById(video);
@@ -117,6 +95,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             }
         }
         return result;
+    }
+
+    @Override
+    public int assign(Integer amount, Users users) {
+        Page<Video> page = new Page<>(1, amount);
+        page = (Page<Video>) page(page, new QueryWrapper<Video>().eq("tagged", 3));
+        List<Video> videos = page.getRecords();
+        videos.forEach(video -> {
+            video.setTagged(0);
+            video.setTagger(users.getId());
+        });
+        if (videos.isEmpty()) {
+            return 0;
+        }
+        if (updateBatchById(videos)) {
+            return videos.size();
+        }
+        return 0;
     }
 
 }

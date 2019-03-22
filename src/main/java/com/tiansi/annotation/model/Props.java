@@ -14,11 +14,12 @@ public class Props {
     private String basePath;
     private String clipHome;
     private String originVideoHome;
+    private String undividedVideoHome;
     private String videoHome;
     private String imageHome;
     private int stepSize;
     private String serverAddress;
     private String[] videoTypes;
-    private List<VideoRange> videoRanges1;
-    private List<VideoRange> videoRanges2;
+//    private List<VideoRange> videoRanges1;
+//    private List<VideoRange> videoRanges2;
 }

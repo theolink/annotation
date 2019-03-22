@@ -26,8 +26,8 @@ public class DirectoriesServiceImpl extends ServiceImpl<DirectoriesMapper, Direc
     }
 
     @Override
-    public ArrayList<String> notScan() throws TiansiException {
-        File originHome = new File(props.getOriginVideoHome());
+    public ArrayList<String> notScan(String home) throws TiansiException {
+        File originHome = new File(home);
         if (!originHome.isDirectory()) {
             throw new TiansiException(ErrorCode.INVALID_CONFIG, "OriginVideoHome is not a directory!");
         }

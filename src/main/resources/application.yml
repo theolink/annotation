@@ -1,35 +1,67 @@
-#数据源配置
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.99.100:3306/annotation?characterEncoding=utf-8
-    username: root
-    password: 123456
 #服务器配置
 server:
   servlet:
     context-path: /annotation
   port: 9090
+
+spring:
+  profiles:
+    active: prod
+---
+
+#数据源配置
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/annotation?characterEncoding=utf-8
+    username: root
+    password: 123456
+
 #运行参数
 props:
   basePath: F:/data/annotation
   clipHome: F:/data/annotation/clips
   originVideoHome: F:/data/annotation/video/origin
+  undividedVideoHome:  F:/data/annotation/video/processed/undivided
   videoHome: F:/data/annotation/video/processed
   imageHome:  F:/data/annotation/image
   stepSize: 1
   serverAddress: 192.168.1.120:8080/annotation
   videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
+
+---
+#数据源配置
+spring:
+  profiles: prod
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.250:3306/annotation?characterEncoding=utf-8
+    username: root
+    password: 123456
+
+#运行参数
+props:
+  basePath: /usr/annotation
+  clipHome: /usr/annotation/clips
+  originVideoHome: /usr/annotation/video/origin
+  undividedVideoHome:  /usr/annotation/video/processed/undivided
+  videoHome: /usr/annotation/video/processed
+  imageHome:  /usr/annotation/image
+  stepSize: 1
+  serverAddress: 192.168.1.250:18080/annotation
+  videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
+
 #视频分割参数
-  videoRanges1:
-    - {x1: 0,x2: 0.5,y1: 0,y2: 0.5}
-    - {x1: 0.5,x2: 1,y1: 0,y2: 0.5}
-    - {x1: 0,x2: 0.5,y1: 0.5,y2: 1}
-    - {x1: 0.5,x2: 1,y1: 0.5,y2: 1}
-  videoRanges2:
-    - {x1: 0,x2: 0.6666666666666666,y1: 0,y2: 0.6666666666666666}
-    - {x1: 0.6666666666666666,x2: 1,y1: 0,y2: 0.3333333333333333}
-    - {x1: 0.6666666666666666,x2: 1,y1: 0.3333333333333333,y2: 0.6666666666666666}
-    - {x1: 0,x2: 0.3333333333333333,y1: 0.6666666666666666,y2: 1}
-    - {x1: 0.3333333333333333,x2: 0.6666666666666666,y1: 0.6666666666666666,y2: 1}
-    - {x1: 0.6666666666666666,x2: 1,y1: 0.6666666666666666,y2: 1}
+#  videoRanges1:
+#    - {x1: 0,x2: 0.5,y1: 0,y2: 0.5}
+#    - {x1: 0.5,x2: 1,y1: 0,y2: 0.5}
+#    - {x1: 0,x2: 0.5,y1: 0.5,y2: 1}
+#    - {x1: 0.5,x2: 1,y1: 0.5,y2: 1}
+#  videoRanges2:
+#    - {x1: 0,x2: 0.6666666666666666,y1: 0,y2: 0.6666666666666666}
+#    - {x1: 0.6666666666666666,x2: 1,y1: 0,y2: 0.3333333333333333}
+#    - {x1: 0.6666666666666666,x2: 1,y1: 0.3333333333333333,y2: 0.6666666666666666}
+#    - {x1: 0,x2: 0.3333333333333333,y1: 0.6666666666666666,y2: 1}
+#    - {x1: 0.3333333333333333,x2: 0.6666666666666666,y1: 0.6666666666666666,y2: 1}
+#    - {x1: 0.6666666666666666,x2: 1,y1: 0.6666666666666666,y2: 1}

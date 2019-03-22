@@ -5,6 +5,7 @@ import com.tiansi.annotation.domain.Video;
 import com.tiansi.annotation.domain.body.VideoRequestBody;
 import com.tiansi.annotation.exception.ErrorCode;
 import com.tiansi.annotation.exception.TiansiException;
+import com.tiansi.annotation.mapper.VideoMapper;
 import com.tiansi.annotation.model.Props;
 import com.tiansi.annotation.service.ClipsService;
 import org.apache.commons.io.FileUtils;
@@ -34,6 +35,8 @@ public class VideoUtil {
     private ClipsService clipsService;
     @Autowired
     private AddressUtil addressUtil;
+    @Autowired
+    private VideoMapper videoMapper;
 
     /**
      * @param video video
@@ -87,6 +90,9 @@ public class VideoUtil {
                     clips.setVideoId(video.getId());
                     clips.setName(clipName);
                     clipsService.save(clips);
+                    Video processedVideo = videoMapper.selectById(video.getId());
+                    processedVideo.setTagged(2);
+                    videoMapper.updateById(processedVideo);
                 } catch (Exception e) {
                     throw new TiansiException(ErrorCode.FILE_OPERATION_ERROR, e.getMessage());
                 }
@@ -106,7 +112,8 @@ public class VideoUtil {
      * @apiNote 生成帧文件
      */
     private Integer interceptFrame(String videoPath, String outputPath, double start, double end, int step) {
-        videoPath=addressUtil.disFormat(addressUtil.toLocalAddress(videoPath));
+        videoPath = addressUtil.toLocalAddress(videoPath);
+
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture(videoPath);
         int frameNum = 0;

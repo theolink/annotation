@@ -19,7 +19,7 @@ public interface DirectoriesService extends IService<Directories> {
      *
      * @return 未扫描目录
      */
-    ArrayList<String> notScan() throws TiansiException;
+    ArrayList<String> notScan(String home) throws TiansiException;
 
 
     /**

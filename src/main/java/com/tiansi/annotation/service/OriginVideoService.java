@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface OriginVideoService extends IService<OriginVideo> {
     /**
@@ -28,7 +29,7 @@ public interface OriginVideoService extends IService<OriginVideo> {
      * @param processor 执行者
      * @return 添加视频个数
      */
-    int scan(String path, Users processor) throws TiansiException;
+    int scan(String path, Users processor,Integer mode) throws TiansiException;
 
     boolean delete(List<Long> originIds);
 
@@ -86,4 +87,42 @@ public interface OriginVideoService extends IService<OriginVideo> {
      * @param originIds 原始视频ID
      */
     void endDivide(List<Long> originIds);
+
+    /**
+     * 提取原始视频中间帧图片
+     */
+    void middleImg();
+
+    /**
+     * 设置分割类型
+     *
+     * @param typeMap typeMap
+     * @return 成功数量
+     */
+    int type(Map<Long, Long> typeMap);
+
+    /**
+     * 设置分割类型
+     *
+     * @param id id
+     * @param typeId typeId
+     * @return 是否成功
+     */
+    boolean type(Long id,Long typeId);
+
+    /**
+     * 取消分割类型
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    boolean untyped(Long id)throws TiansiException;
+
+    /**
+     * 分配任务
+     * @param amount 任务数量
+     * @return 是否成功
+     */
+    int assign(Integer amount,Users users);
+
 }

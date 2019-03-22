@@ -17,8 +17,8 @@ CREATE TABLE video
   origin_video_id BIGINT(20) COMMENT '原始视频ID',
   address  VARCHAR(256) COMMENT '视频地址',
   length   INT(10) COMMENT '视频时长（秒）',
-  tagged   INT(1) DEFAULT 0 COMMENT '是否已标注,0未标注，1标注中，2已标注',
-  tagger   INT(20) COMMENT '标注者ID',
+  tagged   INT(1) DEFAULT 3 COMMENT '区间标记状态：3：未分配，0：已分配，未标记，1：已标记，剪切中，2：已剪切',
+  tagger   BIGINT(20) COMMENT '标注者ID',
   tag_date datetime  COMMENT 'AB区间信息标记时间',
   clips_info VARCHAR(20000) COMMENT '区间信息',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
@@ -33,9 +33,9 @@ CREATE TABLE clips
   frame_num   INT(10) COMMENT '帧数',
   address     VARCHAR(256) COMMENT '帧文件地址',
   xml_address VARCHAR(256) COMMENT 'XML文件地址',
-  tag         TEXT COMMENT '标签JSON',
-  tagged      INT(1) DEFAULT 0 COMMENT '是否已标注,0未标注，1标注中，2已标注',
-  tagger      INT(20) COMMENT '标注者ID',
+  tag         MEDIUMTEXT COMMENT '标签JSON',
+  tagged      INT(1) DEFAULT 0 COMMENT '标签标注状态：0：未分配，1：已分配，未标注，2：已标注',
+  tagger      BIGINT(20) COMMENT '标注者ID',
   tag_date datetime  COMMENT '标签标注时间',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );
@@ -66,10 +66,11 @@ CREATE TABLE origin_video
   address  VARCHAR(256) COMMENT '原始视频地址',
   uploader  BIGINT(20) COMMENT '上传者ID',
   upload_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间',
-  pre_deal INT(1) DEFAULT 0 COMMENT '视频预处理状态,0：未处理，1：处理中，2：已处理',
+  pre_deal INT(1) DEFAULT 0 COMMENT '视频预处理状态,0：未分配，1：已分配，未设置类型，2：已设置类型，未分割，3：分割中，4：已分割',
   pre_dealer BIGINT(20) COMMENT '预处理执行者ID',
   pre_deal_date datetime  COMMENT '预处理执行时间',
   divide_type BIGINT(20) COMMENT '分割类型ID',
+  img_path  VARCHAR(256) COMMENT '原始视频截图地址',
   is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除'
 );
 DROP TABLE IF EXISTS divide_type;
@@ -77,5 +78,8 @@ CREATE TABLE divide_type
 (
   id       BIGINT(20) PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
   name VARCHAR(256) COMMENT '名称',
-  video_ranges VARCHAR(256) COMMENT '分割格式'
+  video_ranges VARCHAR(20000) COMMENT '分割格式',
+  is_deleted  INT(1) DEFAULT 0 COMMENT '是否删除，0：未删除；1：已删除',
+  creator  BIGINT(20) COMMENT '创建者ID',
+  create_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );

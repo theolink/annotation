@@ -9,6 +9,7 @@ import com.tiansi.annotation.domain.body.VideoRequestBody;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.jws.soap.SOAPBinding;
@@ -22,7 +23,6 @@ import java.util.List;
 public class VideoController {
     @Autowired
     private VideoService videoService;
-//    private Users users = new Users(1L, "nmsl", "123456", "ADMIN", 0);
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除视频")
@@ -37,7 +37,7 @@ public class VideoController {
             @ApiImplicitParam(name = "trialId", value = "庭审id", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "name", value = "视频名称", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "originVideoId", value = "原始视频id", paramType = "query", dataType = "Long"),
-            @ApiImplicitParam(name = "tagged", value = "区间标记状态：0：未标记，1：已标记，剪切中，2：已剪切", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "tagged", value = "区间标记状态：3：未分配，0：已分配，未标记，1：已标记，剪切中，2：已剪切", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "tagger", value = "标记者Id", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "tagDateStart", value = "标记时间范围起点 yyyy-MM-dd", paramType = "query", dataType = "Date"),
             @ApiImplicitParam(name = "tagDateEnd", value = "标记时间范围终点 yyyy-MM-dd ", paramType = "query", dataType = "Date"),
@@ -54,56 +54,21 @@ public class VideoController {
                 tagDateEnd, currentPage, pageSize));
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    @ApiOperation(value = "获取所有视频")
-    public Result getAll() {
-        return new Result("videos", VideoRequestBody.fromVideos(videoService.findAll()));
-    }
-
-    @RequestMapping(value = "/getUntagged", method = RequestMethod.GET)
-    @ApiOperation(value = "获取未标注AB区间的视频")
-    public Result getUntagged() {
-        return new Result("videos", VideoRequestBody.fromVideos(videoService.findUntagged()));
-    }
-
-    @RequestMapping(value = "/getSomeones", method = RequestMethod.GET)
-    @ApiOperation(value = "获取指定用户标记过AB区间及标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", paramType = "query", dataType = "Long")
-    public Result getSomeones(@RequestParam() Long id) {
-        return new Result("videos", VideoRequestBody.fromVideos(videoService.findSomeones(id)));
-    }
-
-    @RequestMapping(value = "/getSomeonesTagged", method = RequestMethod.GET)
-    @ApiOperation(value = "获取指定用户标记过AB区间的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", paramType = "query", dataType = "Long")
-    public Result getSomeonesTagged(@RequestParam() Long id) {
-        return new Result("videos", VideoRequestBody.fromVideos(videoService.findSomeonesTagged(id)));
-    }
-
-    @RequestMapping(value = "/getSomeonesTagging", method = RequestMethod.GET)
-    @ApiOperation(value = "获取指定用户标记AB区间中的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", paramType = "query", dataType = "Long")
-    public Result getSomeonesTagging(@RequestParam() Long id) {
-        return new Result("videos", VideoRequestBody.fromVideos(videoService.findSomeonesTagging(id)));
-    }
-
-    @RequestMapping(value = "/{videoId}", method = RequestMethod.GET)
-    @ApiOperation(value = "获取指定id的视频")
-    @ApiImplicitParam(name = "id", value = "用户id", dataType = "Integer")
-    public Result get(@PathVariable int videoId) {
-        return new Result("video", videoService.getById(videoId).requestBody());
-    }
-
     @RequestMapping(value = "/segment", method = RequestMethod.POST)
     @ApiOperation(value = "分割区间，保存视频的AB区间信息")
     public TiansiResponseBody segment(@RequestBody @ApiParam(name = "VideoRequestBody对象", value = "传入JSON格式", required = true)
-                                              VideoRequestBody videoRequestBody, Principal principal) {
+                                              VideoRequestBody videoRequestBody, Authentication authentication) {
         try {
-            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(), (Users) principal));
+            return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(),(Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
         }
     }
-
+    @RequestMapping(value = "/assign", method = RequestMethod.GET)
+    @ApiOperation(value = "分配“设置类型”任务")
+    @ApiImplicitParam(name = "amount", value = "分配任务数量", paramType = "query", dataType = "Integer")
+    public TiansiResponseBody assign(@RequestParam Integer amount, Authentication authentication) {
+        return new TiansiResponseBody(videoService.assign(amount, (Users) authentication.getPrincipal()));
+    }
 
 }

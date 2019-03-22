@@ -17,17 +17,17 @@ public interface ClipsService extends IService<Clips> {
     Page find(Long id, Long videoId, String name, Integer tagged, Long tagger, Date tagDateStart,
               Date tagDateEnd, Integer currentPage, Integer pageSize);
 
-    List<Clips> findByVideoId(Long videoId);
-
-    List<Clips> findByVideoIdUntagged(Long videoId);
-
-    List<Clips> findAll();
-
-    List<Clips> findAllUntagged();
-
     boolean tag(Clips clips, Users processor) throws TiansiException;
 
-    boolean clear(Long id) throws TiansiException;
+    boolean clear(Long id, Users users) throws TiansiException;
 
-    int clearBatch(List<Long> ids) throws TiansiException;
+    int clearBatch(List<Long> ids, Users users) throws TiansiException;
+
+    /**
+     * 分配任务
+     *
+     * @param amount 任务数量
+     * @return 是否成功
+     */
+    int assign(Integer amount, Users users);
 }

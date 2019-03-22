@@ -1,6 +1,7 @@
 package com.tiansi.annotation.domain;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Users implements UserDetails, Serializable {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     private String username;
     private String password;

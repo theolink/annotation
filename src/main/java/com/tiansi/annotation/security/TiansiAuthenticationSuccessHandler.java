@@ -2,6 +2,7 @@ package com.tiansi.annotation.security;
 
 import com.alibaba.fastjson.JSON;
 import com.tiansi.annotation.domain.Users;
+import com.tiansi.annotation.domain.body.UserRequestBody;
 import com.tiansi.annotation.model.TiansiResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,11 +21,13 @@ public class TiansiAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        TiansiResponseBody tiansiResponseBody = new TiansiResponseBody();
+        Users users = (Users) authentication.getPrincipal();
+
+        UserRequestBody userRequestBody=new UserRequestBody(users);
+        TiansiResponseBody tiansiResponseBody = new TiansiResponseBody(userRequestBody);
         tiansiResponseBody.setStatus("200");
         tiansiResponseBody.setMsg("Login Success!");
 
-        Users users = (Users) authentication.getPrincipal();
         String jwtToken = jwtTokenUtil.generateToken(users);
         tiansiResponseBody.setJwtToken(jwtToken);
 
