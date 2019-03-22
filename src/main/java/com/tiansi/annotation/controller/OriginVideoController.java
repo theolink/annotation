@@ -90,9 +90,9 @@ public class OriginVideoController {
     @RequestMapping(value = "/untyped", method = RequestMethod.GET)
     @ApiOperation(value = "取消原始视频分割类型")
     @ApiImplicitParam(name = "id", value = "原始视频id", paramType = "query", dataType = "Long")
-    public TiansiResponseBody untyped(@RequestParam Long id, @RequestParam Long typeId) {
+    public TiansiResponseBody untyped(@RequestParam Long id) {
         try {
-            return new TiansiResponseBody(originVideoService.type(id, typeId));
+            return new TiansiResponseBody(originVideoService.untyped(id));
         } catch (TiansiException e) {
             return new TiansiResponseBody(e);
         }

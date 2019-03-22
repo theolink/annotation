@@ -90,9 +90,6 @@ public class VideoUtil {
                     clips.setVideoId(video.getId());
                     clips.setName(clipName);
                     clipsService.save(clips);
-                    Video processedVideo = videoMapper.selectById(video.getId());
-                    processedVideo.setTagged(2);
-                    videoMapper.updateById(processedVideo);
                 } catch (Exception e) {
                     throw new TiansiException(ErrorCode.FILE_OPERATION_ERROR, e.getMessage());
                 }
@@ -100,6 +97,9 @@ public class VideoUtil {
                 e.printStackTrace();
             }
         });
+        Video processedVideo = videoMapper.selectById(video.getId());
+        processedVideo.setTagged(2);
+        videoMapper.updateById(processedVideo);
     }
 
     /**
