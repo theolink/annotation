@@ -86,6 +86,17 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/reset", method = RequestMethod.GET)
+    @ApiOperation(value = "重置密码")
+    @ApiImplicitParam(name = "id", value = "用户Id", paramType = "query", dataType = "Long", required = true)
+    public TiansiResponseBody reset(@RequestParam Long id) {
+        try {
+            return new TiansiResponseBody(userService.reset(id));
+        } catch (TiansiException e) {
+            return new TiansiResponseBody(e);
+        }
+    }
+
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     @ApiOperation(value = "查找用户")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "原始视频id", paramType = "query", dataType = "Long", required = false),
@@ -95,7 +106,8 @@ public class UserController {
             @ApiImplicitParam(name = "currentPage", value = "当前页码", paramType = "query", dataType = "int", required = true),
             @ApiImplicitParam(name = "pageSize", value = "每页数据量,默认为10", paramType = "query", dataType = "int")
     })
-    public TiansiResponseBody find(@RequestParam(required = false) Long id, @RequestParam(required = false) String username,
+    public TiansiResponseBody find(@RequestParam(required = false) Long id, @RequestParam(required = false) String
+            username,
                                    @RequestParam(required = false) String role, @RequestParam Integer currentPage,
                                    @RequestParam(required = false) Integer pageSize) {
         return new TiansiResponseBody(userService.find(id, username, role, currentPage, pageSize));

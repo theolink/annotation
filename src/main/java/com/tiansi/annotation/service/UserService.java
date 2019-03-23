@@ -22,4 +22,6 @@ public interface UserService extends IService<Users>, UserDetailsService {
 
     Page find(Long id, String username, String role, Integer currentPage, Integer pageSize);
 
+    boolean reset(Long id) throws TiansiException;
+
 }

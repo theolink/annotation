@@ -51,6 +51,9 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         if (!(id.equals(users.getId()) || users.getRole().equals("ADMIN"))) {
             throw new TiansiException(ErrorCode.LIMITED_AUTHORITY, "Limited Authority !");
         }
+        if (id == 1) {
+            throw new TiansiException(ErrorCode.INVALID_PARAMETER, "Super can not be deleted !");
+        }
         return removeById(id);
     }
 
@@ -111,5 +114,16 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         Page<UserRequestBody> userRequestBodyPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         userRequestBodyPage.setPages(page.getPages()).setRecords(UserRequestBody.fromUsers(page.getRecords()));
         return userRequestBodyPage;
+    }
+
+    @Override
+    public boolean reset(Long id) throws TiansiException {
+        Users users = getById(id);
+        if (users == null) {
+            throw new TiansiException(ErrorCode.ENTITY_NOT_EXIST, "User with id " + id + " is not exist !");
+        }
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        users.setPassword(bCryptPasswordEncoder.encode("123456"));
+        return updateById(users);
     }
 }

@@ -6,7 +6,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: rel
 ---
 
 #数据源配置
@@ -50,5 +50,27 @@ props:
   imageHome:  /usr/annotation/image
   stepSize: 1
   serverAddress: 192.168.1.250:18080/annotation
+  videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
+
+---
+#数据源配置
+spring:
+  profiles: rel
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.250:3306/annotation?characterEncoding=utf-8
+    username: root
+    password: 123456
+
+  #运行参数
+props:
+  basePath: /usr/annotation
+  clipHome: /usr/annotation/clips
+  originVideoHome: /usr/annotation/video/origin
+  undividedVideoHome:  /usr/annotation/video/processed/undivided
+  videoHome: /usr/annotation/video/processed
+  imageHome:  /usr/annotation/image
+  stepSize: 1
+  serverAddress: 202.115.52.128:18080/annotation
   videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
 

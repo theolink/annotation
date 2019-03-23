@@ -92,7 +92,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 //以 "/admin/" 开头的URL只能由拥有 "ROLE_ADMIN"角色的用户访问。请注意我们使用 hasRole 方法
                 // .antMatchers("/admin").hasRole("ADMIN")
                 // .antMatchers("/uuu").access("hasRole('USER') or hasRole('ADMIN') ")
-                .antMatchers("/type/add", "/type/delete", "/type/update", "/user/add").hasRole("ADMIN")
+                .antMatchers("/type/add", "/type/delete", "/type/update", "/user/add","/user/reset").hasRole("ADMIN")
                 .anyRequest().access("hasRole('USER') or hasRole('ADMIN') ")
                 .and()
 
