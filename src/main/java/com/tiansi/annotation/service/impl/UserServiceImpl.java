@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users> implements 
         if (users.getRole().equals("ADMIN")) {
             beforeUpdate.setPassword(bCryptPasswordEncoder.encode(newPwd));
         } else {
-            if (bCryptPasswordEncoder.encode(oldPwd).equals(beforeUpdate.getPassword())) {
+            if (bCryptPasswordEncoder.matches(oldPwd,beforeUpdate.getPassword())) {
                 beforeUpdate.setPassword(bCryptPasswordEncoder.encode(newPwd));
             } else {
                 throw new TiansiException(ErrorCode.LIMITED_AUTHORITY, "Limited Authority !");

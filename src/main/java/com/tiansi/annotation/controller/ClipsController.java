@@ -57,7 +57,7 @@ public class ClipsController {
         try {
             return new TiansiResponseBody(clipsService.tag(clipsRequestBody.toClips(), (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(),e);
         }
     }
 
@@ -68,7 +68,7 @@ public class ClipsController {
         try {
             return new TiansiResponseBody(clipsService.clear(id, (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(),e);
         }
     }
 
@@ -79,7 +79,7 @@ public class ClipsController {
         try {
             return new TiansiResponseBody(clipsService.clearBatch(ids, (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(),e);
         }
     }
 

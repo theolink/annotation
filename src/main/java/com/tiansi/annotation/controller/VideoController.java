@@ -59,7 +59,7 @@ public class VideoController {
         try {
             return new TiansiResponseBody(videoService.segment(videoRequestBody.toVideo(), (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e.getErrorCode(), e.getMessage());
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 

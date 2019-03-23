@@ -28,4 +28,16 @@ public class TiansiResponseBody implements Serializable {
         this.status = String.valueOf(errorCode);
         this.msg = msg;
     }
+
+    public TiansiResponseBody(int errorCode, String msg, Object result) {
+        this.status = String.valueOf(errorCode);
+        this.msg = msg;
+        this.result = result;
+    }
+
+    public TiansiResponseBody(String status, String msg, Object result) {
+        this.status = status;
+        this.msg = msg;
+        this.result = result;
+    }
 }

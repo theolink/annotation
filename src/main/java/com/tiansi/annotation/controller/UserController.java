@@ -29,7 +29,7 @@ public class UserController {
             return new TiansiResponseBody(userService.add(userRequestBody.toUsers()));
         } catch (TiansiException e) {
             e.printStackTrace();
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 
@@ -41,7 +41,7 @@ public class UserController {
             return new TiansiResponseBody(userService.delete(id, (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             e.printStackTrace();
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 
@@ -60,7 +60,7 @@ public class UserController {
             return new TiansiResponseBody(userService.update(id, username, role, (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             e.printStackTrace();
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 
@@ -76,13 +76,14 @@ public class UserController {
         String oldPwd = param.get("oldPwd").toString();
         String newPwd = param.get("newPwd").toString();
         if (StringUtils.isEmpty(newPwd)) {
-            return new TiansiResponseBody(new TiansiException(ErrorCode.INVALID_PARAMETER, "NewPwd can not be null !"));
+            return new TiansiResponseBody(ErrorCode.INVALID_PARAMETER, "NewPwd can not be null !",
+                    new TiansiException(ErrorCode.INVALID_PARAMETER, "NewPwd can not be null !"));
         }
         try {
             return new TiansiResponseBody(userService.changePassword(id, oldPwd, newPwd, (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             e.printStackTrace();
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 
@@ -93,7 +94,7 @@ public class UserController {
         try {
             return new TiansiResponseBody(userService.reset(id));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(), e.getMessage(), e);
         }
     }
 

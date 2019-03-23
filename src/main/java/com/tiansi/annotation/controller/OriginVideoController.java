@@ -83,7 +83,7 @@ public class OriginVideoController {
         try {
             return new TiansiResponseBody(originVideoService.type(id, typeId));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(),e.getMessage(),e);
         }
     }
 
@@ -94,7 +94,7 @@ public class OriginVideoController {
         try {
             return new TiansiResponseBody(originVideoService.untyped(id));
         } catch (TiansiException e) {
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(),e.getMessage(),e);
         }
     }
 

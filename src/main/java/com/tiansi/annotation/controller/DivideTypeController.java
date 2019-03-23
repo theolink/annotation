@@ -42,7 +42,7 @@ public class DivideTypeController {
             return new TiansiResponseBody(divideTypeService.update(divideTypeRequestBody.toDivideType(), (Users) authentication.getPrincipal()));
         } catch (TiansiException e) {
             e.printStackTrace();
-            return new TiansiResponseBody(e);
+            return new TiansiResponseBody(e.getErrorCode(),e.getMessage(),e);
         }
     }
 
