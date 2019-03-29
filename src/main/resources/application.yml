@@ -71,6 +71,6 @@ props:
   videoHome: /usr/annotation/video/processed
   imageHome:  /usr/annotation/image
   stepSize: 1
-  serverAddress: 202.115.52.128:18080/annotation
+  serverAddress: tiansilab.dynamic-dns.net:18080/annotation
   videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
 
