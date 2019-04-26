@@ -1,30 +1,32 @@
-//package com.tiansi.annotation.service;
-//
-//import com.tiansi.annotation.domain.OriginVideo;
-//import com.tiansi.annotation.domain.Users;
-//import com.tiansi.annotation.model.Props;
-//import com.tiansi.annotation.util.OriginVideoUtil;
-//import org.aspectj.weaver.ast.Or;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringRunner;
-//
-//import java.io.File;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-//public class OriginVideoServiceTest {
-//    @Autowired
-//    private Props props;
-//    @Autowired
-//    private OriginVideoService originVideoService;
-//    @Autowired
-//    private OriginVideoUtil originVideoUtil;
-//
+package com.tiansi.annotation.service;
+
+import com.tiansi.annotation.domain.OriginVideo;
+import com.tiansi.annotation.domain.Users;
+import com.tiansi.annotation.model.Props;
+import com.tiansi.annotation.util.AddressUtil;
+import com.tiansi.annotation.util.OriginVideoUtil;
+import org.aspectj.weaver.ast.Or;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class OriginVideoServiceTest {
+    @Autowired
+    private Props props;
+    @Autowired
+    private OriginVideoService originVideoService;
+    @Autowired
+    private OriginVideoUtil originVideoUtil;
+    @Autowired
+    private AddressUtil addressUtil;
 //    @Test
 //    public void pathTest() {
 //        String path1 = "F:\\data\\annotation";
@@ -66,4 +68,13 @@
 //    public void middleImgTest() {
 //        originVideoService.middleImg();
 //    }
-//}
+//    @Test
+//    public void videoNameTest(){
+//        File directory = new File("E:\\data\\annotation\\video\\processed\\undivided\\20190303-法律视频\\100ANV01-R");
+//        File[] fileList = directory.listFiles();
+//        for (File file : fileList) {
+//            String path = addressUtil.getFileName(file.getAbsolutePath());
+//            System.out.println(path);
+//        }
+//    }
+}

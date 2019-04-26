@@ -87,7 +87,7 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
                     if (originVideoUtil.isVideo(fileName)) {
                         String absolutePath = fileList[i].getAbsolutePath();
                         String videoPath = addressUtil.toServerAddress(absolutePath);
-                        String videoName = addressUtil.getFileName(videoPath);
+                        String videoName = addressUtil.getFileName(absolutePath);
                         OriginVideo originVideo = new OriginVideo();
                         originVideo.setName(videoName);
                         originVideo.setAddress(videoPath);

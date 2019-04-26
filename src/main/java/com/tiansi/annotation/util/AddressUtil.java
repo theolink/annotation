@@ -28,11 +28,10 @@ public class AddressUtil {
 
     public String getFileName(String path) {
         path = addressFormat(path);
-        int start = path.lastIndexOf('/');
-        start = start >= 0 ? start + 1 : 0;
-        int end = path.lastIndexOf('.');
-        end = end >= 0 ? end : 0;
-        return path.substring(start, end);
+        path = path.replace(props.getUndividedVideoHome() + "/", "");
+        path = path.replace("/", "-");
+        path = path.substring(0, path.lastIndexOf("."));
+        return path;
     }
 
     public String getTrialName(String path) {

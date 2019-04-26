@@ -22,12 +22,12 @@ spring:
 
 #运行参数
 props:
-  basePath: F:/data/annotation
-  clipHome: F:/data/annotation/clips
-  originVideoHome: F:/data/annotation/video/origin
-  undividedVideoHome:  F:/data/annotation/video/processed/undivided
-  videoHome: F:/data/annotation/video/processed
-  imageHome:  F:/data/annotation/image
+  basePath: E:/data/annotation
+  clipHome: E:/data/annotation/clips
+  originVideoHome: E:/data/annotation/video/origin
+  undividedVideoHome:  E:/data/annotation/video/processed/undivided
+  videoHome: E:/data/annotation/video/processed
+  imageHome:  E:/data/annotation/image
   stepSize: 1
   serverAddress: 192.168.1.120:8080/annotation
   videoTypes: mp4,avi,mkv,flv,rmvb,wmv,m4v,asf,rm,3gp,mov
