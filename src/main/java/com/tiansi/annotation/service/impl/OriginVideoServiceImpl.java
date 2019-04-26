@@ -182,32 +182,34 @@ public class OriginVideoServiceImpl extends ServiceImpl<OriginVideoMapper, Origi
 
     @Override
     public void startDivide(Long originId, Users processor) {
-        OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(3);
-        update(originVideo, new UpdateWrapper<OriginVideo>().eq("id", originId));
+        if(originId==null){
+            return;
+        }
+        this.baseMapper.startDivide(3, originId);
     }
 
     @Override
     public void startDivide(List<Long> originIds, Users processor) {
-        OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(3);
-        update(originVideo, new UpdateWrapper<OriginVideo>().in("id", originIds));
+        if(originIds.isEmpty()){
+            return;
+        }
+        this.baseMapper.startDivide(3, originIds);
     }
 
     @Override
     public void endDivide(Long originId) {
-        OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(4);
-        originVideo.setPreDealDate(new Date());
-        update(originVideo, new UpdateWrapper<OriginVideo>().eq("id", originId));
+        if(originId==null){
+            return;
+        }
+        this.baseMapper.endDivide(4, new Date(), originId);
     }
 
     @Override
     public void endDivide(List<Long> originIds) {
-        OriginVideo originVideo = new OriginVideo();
-        originVideo.setPreDeal(4);
-        originVideo.setPreDealDate(new Date());
-        update(originVideo, new UpdateWrapper<OriginVideo>().in("id", originIds));
+        if(originIds.isEmpty()){
+            return;
+        }
+        this.baseMapper.endDivide(4, new Date(), originIds);
     }
 
     @Override
